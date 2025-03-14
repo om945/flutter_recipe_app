@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_recipe_app/Pages/drawer.dart';
+import 'package:flutter_recipe_app/Pages/search_page.dart';
 import 'package:flutter_recipe_app/modules/recipe_models.dart';
 import 'package:flutter_recipe_app/modules/service.dart';
-import 'dart:ui';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -41,6 +41,56 @@ class _HomepageState extends State<Homepage> {
               offset: Offset(0, 4))
         ]),
         child: BottomNavigationBar(
+            onTap: (value) {
+              if (value == 0) {
+                Navigator.pushReplacementNamed(context, '/');
+              } else if (value == 1) {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) => Search(),
+                    transitionDuration: Duration(milliseconds: 200),
+                    reverseTransitionDuration: Duration(milliseconds: 200),
+                    transitionsBuilder:
+                        (context, animation1, animation2, child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1, 0),
+                          end: Offset(0, 0),
+                        ).animate(animation1),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              } else if (value == 2) {
+                showModalBottomSheet(
+                  sheetAnimationStyle: AnimationStyle(
+                      curve: Curves.bounceInOut,
+                      duration: Duration(seconds: 1)),
+                  context: context,
+                  builder: (context) {
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                          ),
+                        ),
+                        child: Drawer(
+                          child: MyDrawer(),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
             selectedLabelStyle: TextStyle(
                 fontSize: MediaQuery.of(context).size.height * 0.018,
                 fontFamily: 'Bold'),
@@ -55,14 +105,21 @@ class _HomepageState extends State<Homepage> {
             items: [
               BottomNavigationBarItem(
                   icon: Icon(Icons.home_rounded), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search')
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Search',
+                  tooltip: 'Search for recipes'),
+              BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu')
             ]),
       ),
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: Text(
           "Fork & Fire",
           style: TextStyle(
-              color: Color.fromRGBO(76, 175, 80, 1), fontFamily: 'Bold'),
+              color: Color.fromRGBO(76, 175, 80, 1),
+              fontFamily: 'Bold',
+              fontSize: MediaQuery.of(context).size.height * 0.035),
         ),
       ),
       body: CustomScrollView(
