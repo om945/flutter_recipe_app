@@ -32,7 +32,32 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: MyDrawer(),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+              color: const Color.fromRGBO(0, 0, 0, 25),
+              spreadRadius: 0,
+              blurRadius: 16.1,
+              offset: Offset(0, 4))
+        ]),
+        child: BottomNavigationBar(
+            selectedLabelStyle: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.018,
+                fontFamily: 'Bold'),
+            unselectedLabelStyle: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.016,
+                fontFamily: 'medium'),
+            unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
+            selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
+            currentIndex: 0,
+            elevation: 10,
+            backgroundColor: Color.fromRGBO(211, 231, 192, 1),
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search')
+            ]),
+      ),
       appBar: AppBar(
         title: Text(
           "Fork & Fire",
