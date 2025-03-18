@@ -1,6 +1,5 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:flutter_recipe_app/Pages/drawer.dart';
-import 'package:flutter_recipe_app/Pages/search_page.dart';
 import 'package:flutter_recipe_app/modules/recipe_models.dart';
 import 'package:flutter_recipe_app/modules/service.dart';
 
@@ -13,10 +12,15 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   List<Categories> recipeModels = [];
+  bool _isLoading = true;
   myRecipes() {
+    setState(() {
+      _isLoading = true;
+    });
     recipeItems().then((value) {
       setState(() {
         recipeModels = value;
+        _isLoading = false;
       });
     });
   }
@@ -32,86 +36,79 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: const Color.fromRGBO(0, 0, 0, 25),
-              spreadRadius: 0,
-              blurRadius: 16.1,
-              offset: Offset(0, 4))
-        ]),
-        child: BottomNavigationBar(
-            onTap: (value) {
-              if (value == 0) {
-                Navigator.pushReplacementNamed(context, '/');
-              } else if (value == 1) {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => Search(),
-                    transitionDuration: Duration(milliseconds: 200),
-                    reverseTransitionDuration: Duration(milliseconds: 200),
-                    transitionsBuilder:
-                        (context, animation1, animation2, child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1, 0),
-                          end: Offset(0, 0),
-                        ).animate(animation1),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
-              } else if (value == 2) {
-                showModalBottomSheet(
-                  sheetAnimationStyle: AnimationStyle(
-                      curve: Curves.bounceInOut,
-                      duration: Duration(seconds: 1)),
-                  context: context,
-                  builder: (context) {
-                    return Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                          ),
-                        ),
-                        child: Drawer(
-                          child: MyDrawer(),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-            selectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.018,
-                fontFamily: 'Bold'),
-            unselectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.016,
-                fontFamily: 'medium'),
-            unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
-            selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
-            currentIndex: 0,
-            elevation: 10,
-            backgroundColor: Color.fromRGBO(211, 231, 192, 1),
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                  tooltip: 'Search for recipes'),
-              BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu')
-            ]),
-      ),
+      // bottomNavigationBar: Container(
+      //   decoration: BoxDecoration(boxShadow: [
+      //     BoxShadow(
+      //         color: const Color.fromRGBO(0, 0, 0, 25),
+      //         spreadRadius: 0,
+      //         blurRadius: 16.1,
+      //         offset: Offset(0, 4))
+      //   ]),
+      //   child: BottomNavigationBar(
+      //       onTap: (value) {
+      //         if (value == 0) {
+      //           Navigator.pushReplacementNamed(context, '/');
+      //         } else if (value == 1) {
+      //           Navigator.push(
+      //             context,
+      //             PageRouteBuilder(
+      //               pageBuilder: (context, animation1, animation2) => Search(),
+      //               transitionDuration: Duration(milliseconds: 200),
+      //               reverseTransitionDuration: Duration(milliseconds: 200),
+      //               transitionsBuilder:
+      //                   (context, animation1, animation2, child) {
+      //                 return SlideTransition(
+      //                   position: Tween<Offset>(
+      //                     begin: Offset(1, 0),
+      //                     end: Offset(0, 0),
+      //                   ).animate(animation1),
+      //                   child: child,
+      //                 );
+      //               },
+      //             ),
+      //           );
+      //         } else if (value == 2) {
+      //           showModalBottomSheet(
+      //             shape: RoundedRectangleBorder(
+      //                 borderRadius: BorderRadius.all(Radius.circular(20))),
+      //             sheetAnimationStyle: AnimationStyle(
+      //                 curve: Curves.bounceInOut,
+      //                 duration: Duration(seconds: 1)),
+      //             context: context,
+      //             builder: (context) {
+      //               return Container(
+      //                 height: MediaQuery.of(context).size.height * 0.6,
+      //                 width: MediaQuery.of(context).size.width * 0.8,
+      //                 decoration: BoxDecoration(),
+      //                 child: Drawer(
+      //                   child: MyDrawer(),
+      //                 ),
+      //               );
+      //             },
+      //           );
+      //         }
+      //       },
+      //       selectedLabelStyle: TextStyle(
+      //           fontSize: MediaQuery.of(context).size.height * 0.018,
+      //           fontFamily: 'Bold'),
+      //       unselectedLabelStyle: TextStyle(
+      //           fontSize: MediaQuery.of(context).size.height * 0.016,
+      //           fontFamily: 'medium'),
+      //       unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
+      //       selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
+      //       currentIndex: 0,
+      //       elevation: 10,
+      //       backgroundColor: Color.fromRGBO(211, 231, 192, 1),
+      //       items: [
+      //         BottomNavigationBarItem(
+      //             icon: Icon(Icons.home_rounded), label: 'Home'),
+      //         BottomNavigationBarItem(
+      //             icon: Icon(Icons.search),
+      //             label: 'Search',
+      //             tooltip: 'Search for recipes'),
+      //         BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu')
+      //       ]),
+      // ),
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: Text(
@@ -250,61 +247,93 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
           // Grid view section
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.85,
-              crossAxisCount: 2, // number of columns
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Card(
-                  semanticContainer: false,
-                  color: Color.fromRGBO(211, 231, 192, 1),
-                  margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.023,
+          _isLoading
+              ? SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromRGBO(76, 175, 80, 1),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Image.network(
-                                fit: BoxFit.cover,
-                                recipeModels[index].strCategoryThumb ?? ''),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            recipeModels[index].strCategory ?? '',
-                            style: TextStyle(
-                                fontFamily: 'Bold',
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.025),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                          child: Text(
-                            recipeModels[index].idCategory ?? '',
-                            style: TextStyle(
-                                fontFamily: 'Bold',
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.012),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                );
-              },
-              childCount: recipeModels.length,
-            ),
-          ),
+                )
+              : SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.78,
+                    crossAxisCount: 2, // number of columns
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          semanticContainer: false,
+                          color: Color.fromRGBO(211, 231, 192, 1),
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.023,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25),
+                                    child: _isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        : Image.network(
+                                            scale: 0.2,
+                                            fit: BoxFit.cover,
+                                            recipeModels[index]
+                                                    .strCategoryThumb ??
+                                                ''),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    recipeModels[index].strCategory ?? '',
+                                    style: TextStyle(
+                                        fontFamily: 'Bold',
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.025),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Text(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    recipeModels[index]
+                                            .strCategoryDescription ??
+                                        '',
+                                    style: TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.018),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: recipeModels.length,
+                  ),
+                ),
         ],
       ),
     );

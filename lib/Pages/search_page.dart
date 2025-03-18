@@ -1,66 +1,208 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_recipe_app/Pages/drawer.dart';
+import 'package:flutter_recipe_app/modules/recipe_search.dart';
+import 'package:http/http.dart' as http;
 
-class Search extends StatelessWidget {
+class Search extends StatefulWidget {
   const Search({super.key});
+
+  @override
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  List<Meals> recipeModels = [];
+  bool _isLoading = false;
+  final TextEditingController _textController = TextEditingController();
+
+  // Function to fetch recipes based on search input
+  Future<List<Meals>> recipeSearch(String query) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    Uri url = Uri.parse(
+        "https://www.themealdb.com/api/json/v1/1/search.php?s=$query");
+    var response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        if (data['meals'] != null) {
+          return (data['meals'] as List)
+              .map((meal) => Meals.fromJson(meal))
+              .toList();
+        } else {
+          return []; // Return empty list if no meals found
+        }
+      } else {
+        if (kDebugMode) print("Failed to load data");
+        return [];
+      }
+    } catch (e) {
+      if (kDebugMode) print("Error: ${e.toString()}");
+      return [];
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _onSearch() async {
+    String searchText = _textController.text.trim();
+    if (searchText.isNotEmpty) {
+      var results = await recipeSearch(searchText);
+      setState(() {
+        recipeModels = results;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: const Color.fromRGBO(0, 0, 0, 25),
-              spreadRadius: 0,
-              blurRadius: 16.1,
-              offset: Offset(0, 4))
-        ]),
-        child: BottomNavigationBar(
-            onTap: (value) {
-              if (value == 0) {
-                Navigator.pop(context);
-              } else if (value == 1) {
-                return;
-              } else if (value == 2) {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Drawer(
-                      child: MyDrawer(),
-                    );
-                  },
-                );
-              }
-            },
-            selectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.018,
-                fontFamily: 'Bold'),
-            unselectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.016,
-                fontFamily: 'medium'),
-            unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
-            selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
-            currentIndex: 1,
-            elevation: 10,
-            backgroundColor: Color.fromRGBO(211, 231, 192, 1),
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                  tooltip: 'Search for recipes')
-            ]),
-      ),
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: Text(
           "Search",
           style: TextStyle(
-              color: Color.fromRGBO(76, 175, 80, 1),
-              fontFamily: 'Medium',
-              fontSize: MediaQuery.of(context).size.height * 0.03),
+            color: Color.fromRGBO(76, 175, 80, 1),
+            fontFamily: 'Medium',
+            fontSize: MediaQuery.of(context).size.height * 0.035,
+          ),
         ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          // Search Bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _textController,
+                decoration: InputDecoration(
+                  hintText: "Search for Recipes",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  suffixIcon: Container(
+                    height: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(19),
+                      color: Colors.green,
+                    ),
+                    child: TextButton(
+                      onPressed: _onSearch,
+                      child:
+                          Text("Search", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Show Loading Indicator
+          if (_isLoading)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                    child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Color.fromRGBO(76, 175, 80, 1),
+                  ),
+                )),
+              ),
+            )
+          else if (recipeModels.isEmpty)
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("No recipes found. Try searching!",
+                      style: TextStyle(fontSize: 18)),
+                ),
+              ),
+            )
+          else
+            // Recipe Grid using SliverGrid
+            SliverPadding(
+              padding: const EdgeInsets.all(10.0),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.64,
+                  crossAxisCount: 2, // number of columns
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        semanticContainer: false,
+                        color: Color.fromRGBO(211, 231, 192, 1),
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.023,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: _isLoading
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : Image.network(
+                                          scale: 0.2,
+                                          fit: BoxFit.cover,
+                                          recipeModels[index].strMealThumb ??
+                                              ''),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  recipeModels[index].strCategory ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'Bold',
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.025),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Text(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  recipeModels[index].strMeal ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'Medium',
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.018),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: recipeModels.length,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

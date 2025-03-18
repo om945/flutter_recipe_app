@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_recipe_app/Pages/homepage.dart';
+import 'package:flutter_recipe_app/Pages/bottom_nav_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFFF5F5DC),
         primarySwatch: Colors.green,
       ),
-      home: const Homepage(),
+      home: BottomNavBar(),
     );
   }
 }

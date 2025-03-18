@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
 
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -19,7 +24,7 @@ class MyDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: ListTile(
                 title: Text(
-                  "H o m e",
+                  "Home",
                   style: TextStyle(fontSize: 20, fontFamily: 'Medium'),
                 ),
                 leading: Icon(Icons.home),
@@ -32,7 +37,7 @@ class MyDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: ListTile(
                 title: Text(
-                  "F a v o r i t e s",
+                  "Favorites",
                   style: TextStyle(fontSize: 20, fontFamily: 'Medium'),
                 ),
                 leading: Icon(Icons.favorite),
@@ -45,7 +50,7 @@ class MyDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: ListTile(
                 title: Text(
-                  "A b o u t",
+                  "About",
                   style: TextStyle(fontSize: 20, fontFamily: 'Medium'),
                 ),
                 leading: Icon(Icons.info),
