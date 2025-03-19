@@ -19,8 +19,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List pages = const [
     Homepage(),
     Search(),
-    MyDrawer(),
-  ];
+  ]; // removed MyDrawer from the list
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,32 +32,39 @@ class _BottomNavBarState extends State<BottomNavBar> {
               blurRadius: 16.1,
               offset: Offset(0, 4))
         ]),
-        child: BottomNavigationBar(
-          onTap: (index) {
-            print('Tapped on index $index');
-            setState(() {
-              myCurrentIndex = index;
-            });
-          },
-          currentIndex: myCurrentIndex,
-          selectedLabelStyle: TextStyle(
-              fontSize: MediaQuery.of(context).size.height * 0.018,
-              fontFamily: 'Bold'),
-          unselectedLabelStyle: TextStyle(
-              fontSize: MediaQuery.of(context).size.height * 0.016,
-              fontFamily: 'medium'),
-          unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
-          selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
-          elevation: 10,
-          backgroundColor: Color.fromRGBO(211, 231, 192, 1),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-          ],
-        ),
+        child: Builder(builder: (context) {
+          return BottomNavigationBar(
+            onTap: (index) {
+              if (index == 2) {
+                Scaffold.of(context).openEndDrawer();
+              } else {
+                setState(() {
+                  myCurrentIndex = index;
+                });
+              }
+            },
+            currentIndex: myCurrentIndex,
+            selectedLabelStyle: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.018,
+                fontFamily: 'Bold'),
+            unselectedLabelStyle: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.016,
+                fontFamily: 'medium'),
+            unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
+            selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
+            elevation: 10,
+            backgroundColor: Color.fromRGBO(211, 231, 192, 1),
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search), label: 'Search'),
+              BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
+            ],
+          );
+        }),
       ),
       body: pages[myCurrentIndex],
+      endDrawer: MyDrawer(),
     );
   }
 }

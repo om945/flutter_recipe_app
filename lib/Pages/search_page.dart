@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_recipe_app/Pages/recipe_details.dart';
 import 'package:flutter_recipe_app/modules/recipe_search.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,13 +18,13 @@ class _SearchState extends State<Search> {
   final TextEditingController _textController = TextEditingController();
 
   // Function to fetch recipes based on search input
-  Future<List<Meals>> recipeSearch(String query) async {
+  Future<List<Meals>> recipeSearch(String recipe) async {
     setState(() {
       _isLoading = true;
     });
 
     Uri url = Uri.parse(
-        "https://www.themealdb.com/api/json/v1/1/search.php?s=$query");
+        "https://www.themealdb.com/api/json/v1/1/search.php?s=$recipe");
     var response = await http.get(url);
 
     try {
@@ -108,7 +109,7 @@ class _SearchState extends State<Search> {
           if (_isLoading)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(50.0),
                 child: Center(
                     child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -128,7 +129,6 @@ class _SearchState extends State<Search> {
               ),
             )
           else
-            // Recipe Grid using SliverGrid
             SliverPadding(
               padding: const EdgeInsets.all(10.0),
               sliver: SliverGrid(
@@ -138,61 +138,73 @@ class _SearchState extends State<Search> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        semanticContainer: false,
-                        color: Color.fromRGBO(211, 231, 192, 1),
-                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.023,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: _isLoading
-                                      ? Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : Image.network(
-                                          scale: 0.2,
-                                          fit: BoxFit.cover,
-                                          recipeModels[index].strMealThumb ??
-                                              ''),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RecipeDetails(
+                                  recipe: recipeModels[index],
+                                )));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          semanticContainer: false,
+                          color: Color.fromRGBO(211, 231, 192, 1),
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // SizedBox(
+                                //   height: MediaQuery.of(context).size.height *
+                                //       0.023,
+                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: _isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        //Image
+                                        : Image.network(
+                                            recipeModels[index].strMealThumb ??
+                                                '',
+                                            scale: 0.2,
+                                            fit: BoxFit.cover),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  recipeModels[index].strCategory ?? '',
-                                  style: TextStyle(
-                                      fontFamily: 'Bold',
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.025),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    recipeModels[index].strMeal ?? '',
+                                    style: TextStyle(
+                                        fontFamily: 'Bold',
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.021),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                child: Text(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  recipeModels[index].strMeal ?? '',
-                                  style: TextStyle(
-                                      fontFamily: 'Medium',
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.018),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Text(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    recipeModels[index].strArea ?? '',
+                                    style: TextStyle(
+                                        fontFamily: 'Medium',
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.018),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
