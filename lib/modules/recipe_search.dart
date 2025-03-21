@@ -22,9 +22,10 @@ class recipe_search {
 }
 
 class Meals {
+  bool isFavorite = false;
   String? idMeal;
   String? strMeal;
-  Null? strMealAlternate;
+  Null strMealAlternate;
   String? strCategory;
   String? strArea;
   String? strInstructions;
@@ -72,9 +73,9 @@ class Meals {
   String? strMeasure19;
   String? strMeasure20;
   String? strSource;
-  Null? strImageSource;
-  Null? strCreativeCommonsConfirmed;
-  Null? dateModified;
+  Null strImageSource;
+  Null strCreativeCommonsConfirmed;
+  Null dateModified;
 
   Meals(
       {this.idMeal,

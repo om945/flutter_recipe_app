@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_recipe_app/Pages/fav_recipe.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -42,7 +43,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 leading: Icon(Icons.favorite),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => FavRecipe()));
                 },
               ),
             ),

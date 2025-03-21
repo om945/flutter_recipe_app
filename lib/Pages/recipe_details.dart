@@ -1,37 +1,181 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_recipe_app/modules/recipe_search.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class RecipeDetails extends StatelessWidget {
+class RecipeDetails extends StatefulWidget {
   final Meals recipe;
   const RecipeDetails({super.key, required this.recipe});
+
+  @override
+  State<RecipeDetails> createState() => _RecipeDetailsState();
+}
+
+class _RecipeDetailsState extends State<RecipeDetails> {
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipe.strMeal ?? 'Recipe Details'),
+        forceMaterialTransparency: true,
+        title: Text('Recipe Details',
+            style: TextStyle(fontSize: 20, fontFamily: 'Medium')),
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.height * 0.3,
-                      recipe.strMealThumb ?? ''),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.height * 0.3,
+                        widget.recipe.strMealThumb ?? ''),
+                  ),
                 ),
               ),
-              Text(recipe.strMeal ?? '', style: TextStyle(fontSize: 24)),
-              Text(recipe.strArea ?? '', style: TextStyle(fontSize: 18)),
+              Center(
+                child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    widget.recipe.strMeal ?? '',
+                    style: TextStyle(fontSize: 24, fontFamily: 'Bold')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.height * 0.15,
+                      child: Column(
+                        children: [
+                          Text('Area:',
+                              style: TextStyle(
+                                  fontSize: 15, fontFamily: 'Medium')),
+                          Text(widget.recipe.strArea ?? '',
+                              style:
+                                  TextStyle(fontSize: 18, fontFamily: 'Bold')),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      width: 2,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      width: MediaQuery.of(context).size.height * 0.15,
+                      child: Column(
+                        children: [
+                          Text('Category:',
+                              style: TextStyle(
+                                  fontSize: 15, fontFamily: 'Medium')),
+                          Text(widget.recipe.strCategory ?? '',
+                              style:
+                                  TextStyle(fontSize: 18, fontFamily: 'Bold')),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Ingredients:',
+                    style: TextStyle(fontSize: 18, fontFamily: 'Bold')),
+              ),
               ...[
                 for (int i = 1; i <= 20; i++)
-                  if (recipe.getIngredient(i) != "")
-                    Text(recipe.getIngredient(i)),
+                  if (widget.recipe.getIngredient(i) != "")
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        children: [
+                          Text('$i. ${widget.recipe.getIngredient(i)}',
+                              style: TextStyle(
+                                  fontSize: 15, fontFamily: 'Medium')),
+                        ],
+                      ),
+                    ),
               ],
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Information',
+                            style: TextStyle(fontSize: 17, fontFamily: 'Bold')),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        IconButton(
+                          icon: Icon(_isExpanded
+                              ? Icons.arrow_drop_up
+                              : Icons.arrow_drop_down),
+                          onPressed: () {
+                            setState(() {
+                              _isExpanded = !_isExpanded;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    AnimatedCrossFade(
+                      firstChild: Container(),
+                      secondChild: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                textAlign: TextAlign.left,
+                                widget.recipe.strInstructions ?? '',
+                                style: TextStyle(
+                                    fontSize: 15, fontFamily: 'Medium')),
+                          ),
+                        ],
+                      ),
+                      crossFadeState: _isExpanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      duration: Duration(milliseconds: 300),
+                    )
+                  ],
+                ),
+              ),
+              Center(
+                heightFactor: 2,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(19),
+                    color: Color.fromRGBO(243, 195, 195, 10),
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      final url = widget.recipe
+                          .strYoutube; // replace with the link from your JSON file
+                      if (await canLaunch(url ?? '')) {
+                        await launch(url ?? '');
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    child: Text("Seach on YouTube",
+                        style:
+                            TextStyle(color: Color.fromRGBO(50, 48, 49, 10))),
+                  ),
+                ),
+              )
             ],
           ),
         ),

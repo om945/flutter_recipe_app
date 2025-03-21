@@ -13,6 +13,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  List<Meals> favoriteRecipes = [];
   List<Meals> recipeModels = [];
   bool _isLoading = false;
   final TextEditingController _textController = TextEditingController();
@@ -57,6 +58,8 @@ class _SearchState extends State<Search> {
       var results = await recipeSearch(searchText);
       setState(() {
         recipeModels = results;
+        favoriteRecipes =
+            recipeModels.where((recipe) => recipe.isFavorite).toList();
       });
     }
   }
@@ -192,15 +195,46 @@ class _SearchState extends State<Search> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  child: Text(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    recipeModels[index].strArea ?? '',
-                                    style: TextStyle(
-                                        fontFamily: 'Medium',
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        recipeModels[index].strArea ?? '',
+                                        style: TextStyle(
+                                            fontFamily: 'Medium',
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
                                                 0.018),
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            // Toggle favorite status
+                                            recipeModels[index].isFavorite =
+                                                !recipeModels[index].isFavorite;
+                                            // Store favorite recipe
+                                            if (recipeModels[index]
+                                                .isFavorite) {
+                                              favoriteRecipes
+                                                  .add(recipeModels[index]);
+                                            } else {
+                                              favoriteRecipes
+                                                  .remove(recipeModels[index]);
+                                            }
+                                          },
+                                          icon: Icon(
+                                            recipeModels[index].isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color:
+                                                recipeModels[index].isFavorite
+                                                    ? Colors.red
+                                                    : Colors.grey,
+                                          ))
+                                    ],
                                   ),
                                 ),
                               ],
