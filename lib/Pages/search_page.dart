@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_recipe_app/Pages/recipe_details.dart';
 import 'package:flutter_recipe_app/modules/recipe_search.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -13,12 +14,11 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  List<Meals> favoriteRecipes = [];
   List<Meals> recipeModels = [];
   bool _isLoading = false;
   final TextEditingController _textController = TextEditingController();
+  Set<String> favoriteMealIds = {}; // Store meal IDs of favorites
 
-  // Function to fetch recipes based on search input
   Future<List<Meals>> recipeSearch(String recipe) async {
     setState(() {
       _isLoading = true;
@@ -58,10 +58,35 @@ class _SearchState extends State<Search> {
       var results = await recipeSearch(searchText);
       setState(() {
         recipeModels = results;
-        favoriteRecipes =
-            recipeModels.where((recipe) => recipe.isFavorite).toList();
       });
     }
+  }
+
+  void _loadFavorites() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      favoriteMealIds = prefs.getStringList('favoriteMeals')?.toSet() ?? {};
+    });
+  }
+
+  void _toggleFavorite(Meals meal) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      if (favoriteMealIds.contains(meal.idMeal)) {
+        favoriteMealIds.remove(meal.idMeal);
+      } else {
+        favoriteMealIds.add(meal.idMeal!);
+      }
+    });
+
+    await prefs.setStringList('favoriteMeals', favoriteMealIds.toList());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavorites(); // Load favorites when screen initializes
   }
 
   @override
@@ -141,6 +166,8 @@ class _SearchState extends State<Search> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
+                    final recipe = recipeModels[index];
+                    final isFavorite = favoriteMealIds.contains(recipe.idMeal);
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -180,7 +207,7 @@ class _SearchState extends State<Search> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: Text(
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
@@ -211,28 +238,15 @@ class _SearchState extends State<Search> {
                                                 0.018),
                                       ),
                                       IconButton(
-                                          onPressed: () {
-                                            // Toggle favorite status
-                                            recipeModels[index].isFavorite =
-                                                !recipeModels[index].isFavorite;
-                                            // Store favorite recipe
-                                            if (recipeModels[index]
-                                                .isFavorite) {
-                                              favoriteRecipes
-                                                  .add(recipeModels[index]);
-                                            } else {
-                                              favoriteRecipes
-                                                  .remove(recipeModels[index]);
-                                            }
-                                          },
+                                          onPressed: () =>
+                                              _toggleFavorite(recipe),
                                           icon: Icon(
-                                            recipeModels[index].isFavorite
+                                            isFavorite
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
-                                            color:
-                                                recipeModels[index].isFavorite
-                                                    ? Colors.red
-                                                    : Colors.grey,
+                                            color: isFavorite
+                                                ? Colors.red
+                                                : Colors.black,
                                           ))
                                     ],
                                   ),

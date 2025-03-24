@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter_recipe_app/Pages/homepage_recipe.dart';
 import 'package:flutter_recipe_app/modules/recipe_models.dart';
 import 'package:flutter_recipe_app/modules/service.dart';
 
@@ -269,63 +270,77 @@ class _HomepageState extends State<Homepage> {
                     (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
-                        child: Card(
-                          clipBehavior: Clip.antiAlias,
-                          semanticContainer: false,
-                          color: Color.fromRGBO(211, 231, 192, 1),
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.023,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(25),
-                                    child: _isLoading
-                                        ? Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : Image.network(
-                                            scale: 0.2,
-                                            fit: BoxFit.cover,
-                                            recipeModels[index]
-                                                    .strCategoryThumb ??
-                                                ''),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Homepage_Recipe(
+                                      recipe: recipeModels[index].strCategory ??
+                                          '')),
+                            );
+                          },
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            semanticContainer: false,
+                            color: Color.fromRGBO(211, 231, 192, 1),
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: SizedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.023,
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    recipeModels[index].strCategory ?? '',
-                                    style: TextStyle(
-                                        fontFamily: 'Bold',
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                0.025),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(25),
+                                      child: _isLoading
+                                          ? Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : Image.network(
+                                              scale: 0.2,
+                                              fit: BoxFit.cover,
+                                              recipeModels[index]
+                                                      .strCategoryThumb ??
+                                                  ''),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  child: Text(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    recipeModels[index]
-                                            .strCategoryDescription ??
-                                        '',
-                                    style: TextStyle(
-                                        fontFamily: 'Medium',
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                0.018),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      recipeModels[index].strCategory ?? '',
+                                      style: TextStyle(
+                                          fontFamily: 'Bold',
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.025),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      recipeModels[index]
+                                              .strCategoryDescription ??
+                                          '',
+                                      style: TextStyle(
+                                          fontFamily: 'Medium',
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.018),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

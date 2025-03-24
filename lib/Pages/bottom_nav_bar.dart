@@ -27,9 +27,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
-              color: const Color.fromRGBO(0, 0, 0, 25),
+              color: const Color.fromARGB(255, 116, 116, 116),
               spreadRadius: 0,
-              blurRadius: 16.1,
+              blurRadius: 16.5,
               offset: Offset(0, 4))
         ]),
         child: Builder(builder: (context) {

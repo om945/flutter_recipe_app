@@ -11,6 +11,14 @@ class RecipeDetails extends StatefulWidget {
 }
 
 class _RecipeDetailsState extends State<RecipeDetails> {
+  Future<void> openYouTube(String videoId) async {
+    final Uri url = Uri.parse(widget.recipe.strYoutube ?? '');
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
+
   bool _isExpanded = false;
 
   @override
@@ -88,24 +96,29 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Ingredients:',
+                padding: const EdgeInsets.all(10.0),
+                child: Text('• Ingredients:',
                     style: TextStyle(fontSize: 18, fontFamily: 'Bold')),
               ),
               ...[
                 for (int i = 1; i <= 20; i++)
-                  if (widget.recipe.getIngredient(i) != "")
+                  if (widget.recipe.getIngredient(i) != "" &&
+                      widget.recipe.getMeasure(i) != "")
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 15),
                       child: Row(
                         children: [
-                          Text('$i. ${widget.recipe.getIngredient(i)}',
+                          Text(
+                              '${i.toString().padLeft(2)}.  ${widget.recipe.getIngredient(i)} -  ${widget.recipe.getMeasure(i)}',
                               style: TextStyle(
                                   fontSize: 15, fontFamily: 'Medium')),
                         ],
                       ),
                     ),
               ],
+              SizedBox(
+                height: 20,
+              ),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -158,19 +171,13 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   height: MediaQuery.of(context).size.height * 0.05,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(19),
-                    color: Color.fromRGBO(243, 195, 195, 10),
+                    color: Color.fromRGBO(221, 156, 156, 1),
                   ),
                   child: TextButton(
-                    onPressed: () async {
-                      final url = widget.recipe
-                          .strYoutube; // replace with the link from your JSON file
-                      if (await canLaunch(url ?? '')) {
-                        await launch(url ?? '');
-                      } else {
-                        throw 'Could not launch $url';
-                      }
+                    onPressed: () {
+                      openYouTube(widget.recipe.strYoutube ?? '');
                     },
-                    child: Text("Seach on YouTube",
+                    child: Text("Watch on YouTube",
                         style:
                             TextStyle(color: Color.fromRGBO(50, 48, 49, 10))),
                   ),
@@ -228,6 +235,53 @@ extension MealsExtension on Meals {
         return strIngredient19 ?? '';
       case 20:
         return strIngredient20 ?? '';
+      default:
+        return "";
+    }
+  }
+
+  String getMeasure(int index) {
+    switch (index) {
+      case 1:
+        return strMeasure1 ?? '';
+      case 2:
+        return strMeasure2 ?? '';
+      case 3:
+        return strMeasure3 ?? '';
+      case 4:
+        return strMeasure4 ?? '';
+      case 5:
+        return strMeasure5 ?? '';
+      case 6:
+        return strMeasure6 ?? '';
+      case 7:
+        return strMeasure7 ?? '';
+      case 8:
+        return strMeasure8 ?? '';
+      case 9:
+        return strMeasure9 ?? '';
+      case 10:
+        return strMeasure10 ?? '';
+      case 11:
+        return strMeasure11 ?? '';
+      case 12:
+        return strMeasure12 ?? '';
+      case 13:
+        return strMeasure13 ?? '';
+      case 14:
+        return strMeasure14 ?? '';
+      case 15:
+        return strMeasure15 ?? '';
+      case 16:
+        return strMeasure16 ?? '';
+      case 17:
+        return strMeasure17 ?? '';
+      case 18:
+        return strMeasure18 ?? '';
+      case 19:
+        return strMeasure19 ?? '';
+      case 20:
+        return strMeasure20 ?? '';
       default:
         return "";
     }
