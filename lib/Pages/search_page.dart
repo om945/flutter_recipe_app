@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_recipe_app/Pages/recipe_details.dart';
 import 'package:flutter_recipe_app/modules/recipe_search.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -59,6 +59,8 @@ class _SearchState extends State<Search> {
       setState(() {
         recipeModels = results;
       });
+    } else {
+      Text("Enter a recipe");
     }
   }
 
@@ -91,6 +93,8 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,

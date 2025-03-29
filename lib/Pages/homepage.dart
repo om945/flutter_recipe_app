@@ -36,6 +36,8 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       // bottomNavigationBar: Container(
       //   decoration: BoxDecoration(boxShadow: [
@@ -235,7 +237,7 @@ class _HomepageState extends State<Homepage> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        "Popular Recipes",
+                        "Popular Categories",
                         style: TextStyle(
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.025,

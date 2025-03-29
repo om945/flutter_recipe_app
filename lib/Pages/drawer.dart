@@ -11,6 +11,8 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Drawer(
       backgroundColor: Color.fromRGBO(211, 231, 192, 1),
       child: SingleChildScrollView(
