@@ -12,6 +12,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
   List<Categories> recipeModels = [];
   bool _isLoading = true;
   myRecipes() {
@@ -113,13 +115,14 @@ class _HomepageState extends State<Homepage> {
       //       ]),
       // ),
       appBar: AppBar(
+        clipBehavior: Clip.antiAlias,
         forceMaterialTransparency: true,
         title: Text(
           "Fork & Fire",
           style: TextStyle(
               color: Color.fromRGBO(76, 175, 80, 1),
               fontFamily: 'Bold',
-              fontSize: MediaQuery.of(context).size.height * 0.035),
+              fontSize: screenheight * 0.045),
         ),
       ),
       body: CustomScrollView(
@@ -131,18 +134,20 @@ class _HomepageState extends State<Homepage> {
               children: [
                 Center(
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: screenheight * 0.2 * screenwidth * 0.006,
+                    width: screenwidth * 0.8 * screenwidth * 0.006,
                     child: Image.asset(
+                      height: screenheight * 0.3,
+                      width: screenwidth * 0.7,
                       'assets/images/intro.png',
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.126,
+                    height: screenheight * 0.055 * screenwidth * 0.006,
                     child: Stack(
                       children: [
                         Positioned(
@@ -150,36 +155,28 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               Text("Discover",
                                   style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.045,
+                                      fontSize: screenwidth * 0.09,
                                       fontFamily: 'Bold')),
                               Text(" Delicious",
                                   style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.045,
+                                      fontSize: screenwidth * 0.09,
                                       fontFamily: 'Bold',
                                       color: Color.fromRGBO(255, 152, 0, 1)))
                             ],
                           ),
                         ),
                         Positioned(
-                          top: MediaQuery.of(context).size.height * 0.126 / 2.5,
+                          top: screenheight * 0.02 * screenwidth * 0.006,
                           child: Row(
                             children: [
                               Text("Recipes",
                                   style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.045,
+                                      fontSize: screenwidth * 0.09,
                                       fontFamily: 'Bold',
                                       color: Color.fromRGBO(76, 175, 80, 1))),
                               Text(" Instantly!",
                                   style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.045,
+                                    fontSize: screenwidth * 0.09,
                                     fontFamily: 'Bold',
                                   ))
                             ],
@@ -190,17 +187,15 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: screenwidth * 0.8,
                     child: Column(
                       children: [
                         Text(
                           'Find the perfect dish with easy step-by-step guides, smart recommendations, and ingredient-based searches. Cook, save, and share your favorites!',
                           style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.02,
-                              fontFamily: 'Bold'),
+                              fontSize: screenwidth * 0.04, fontFamily: 'Bold'),
                         )
                       ],
                     ),
@@ -235,13 +230,11 @@ class _HomepageState extends State<Homepage> {
                 Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(screenwidth * 0.03),
                       child: Text(
                         "Popular Categories",
                         style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
-                            fontFamily: 'Bold'),
+                            fontSize: screenwidth * 0.05, fontFamily: 'Bold'),
                       ),
                     )
                   ],
@@ -253,7 +246,7 @@ class _HomepageState extends State<Homepage> {
           _isLoading
               ? SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: screenheight * 0.2),
                     child: Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
@@ -265,13 +258,14 @@ class _HomepageState extends State<Homepage> {
                 )
               : SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.78,
-                    crossAxisCount: 2, // number of columns
+                    childAspectRatio: 0.7,
+                    crossAxisCount:
+                        isDesktop(context) ? 4 : 2, // number of columns
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: EdgeInsets.only(bottom: screenheight * 0.01),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -292,41 +286,53 @@ class _HomepageState extends State<Homepage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.023,
+                                    height: screenheight * 0.023,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(25),
-                                      child: _isLoading
-                                          ? Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            )
-                                          : Image.network(
-                                              scale: 0.2,
-                                              fit: BoxFit.cover,
-                                              recipeModels[index]
-                                                      .strCategoryThumb ??
-                                                  ''),
-                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    child: _isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        : Center(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      screenheight *
+                                                          4 /
+                                                          screenwidth *
+                                                          3),
+                                              child: Image.network(
+                                                  // scale: 0.2,
+                                                  fit: BoxFit.cover,
+                                                  recipeModels[index]
+                                                          .strCategoryThumb ??
+                                                      ''),
+                                            ),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    height: screenheight * 0.01,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.all(8),
                                     child: Text(
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       recipeModels[index].strCategory ?? '',
                                       style: TextStyle(
                                           fontFamily: 'Bold',
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.025),
+                                          fontSize: isDesktop(context)
+                                              ? screenwidth * 0.03
+                                              : screenwidth * 0.05),
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: screenheight * 0.01,
+                                  ),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    //padding l and r = 8
+                                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                     child: Text(
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -335,10 +341,9 @@ class _HomepageState extends State<Homepage> {
                                           '',
                                       style: TextStyle(
                                           fontFamily: 'Medium',
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.018),
+                                          fontSize: isDesktop(context)
+                                              ? screenwidth * 0.015
+                                              : screenwidth * 0.035),
                                     ),
                                   ),
                                 ],

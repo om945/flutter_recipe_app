@@ -15,6 +15,9 @@ class Homepage_Recipe extends StatefulWidget {
 }
 
 class _Homepage_RecipeState extends State<Homepage_Recipe> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
   Set<String> favoriteMealIds = {}; // Store meal IDs of favorites
   Future<List<Meals>> recipeSearch() async {
     setState(() {
@@ -171,13 +174,14 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
       //       ]),
       // ),
       appBar: AppBar(
+        clipBehavior: Clip.antiAlias,
         forceMaterialTransparency: true,
         title: Text(
           "Fork & Fire",
           style: TextStyle(
               color: Color.fromRGBO(76, 175, 80, 1),
               fontFamily: 'Bold',
-              fontSize: MediaQuery.of(context).size.height * 0.035),
+              fontSize: screenheight * 0.045),
         ),
       ),
       body: CustomScrollView(
@@ -199,17 +203,17 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
             SliverToBoxAdapter(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Text("No recipes found. Try searching!",
-                      style: TextStyle(fontSize: 18)),
+                      style: TextStyle(fontSize: screenwidth * 0.04)),
                 ),
               ),
             )
           else
             SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.65,
-                crossAxisCount: 2, // number of columns
+                childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
+                crossAxisCount: isDesktop(context) ? 4 : 2, // number of columns
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -233,26 +237,32 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // SizedBox(
-                              //   height: MediaQuery.of(context).size.height *
-                              //       0.023,
-                              // ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: _isLoading
-                                      ? Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      //Image
-                                      : Image.network(
-                                          recipeModels[index].strMealThumb ??
-                                              '',
-                                          scale: 0.2,
-                                          fit: BoxFit.cover),
-                                ),
+                                padding: EdgeInsets.all(8.0),
+                                child: _isLoading
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    //Image
+                                    : Center(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              screenheight *
+                                                  4 /
+                                                  screenwidth *
+                                                  3),
+                                          child: Image.network(
+                                              recipeModels[index]
+                                                      .strMealThumb ??
+                                                  '',
+                                              // scale: 0.2,
+                                              fit: BoxFit.cover),
+                                        ),
+                                      ),
                               ),
+                              // SizedBox(
+                              //   height: screenheight * 0.01,
+                              // ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                 child: Text(
@@ -261,11 +271,14 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
                                   recipeModels[index].strMeal ?? '',
                                   style: TextStyle(
                                       fontFamily: 'Bold',
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.021),
+                                      fontSize: isDesktop(context)
+                                          ? screenwidth * 0.03
+                                          : screenwidth * 0.05),
                                 ),
                               ),
+                              // SizedBox(
+                              //   height: screenheight * 0.01,
+                              // ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                 child: Row(
@@ -278,10 +291,9 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
                                       recipeModels[index].strArea ?? '',
                                       style: TextStyle(
                                           fontFamily: 'Medium',
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.018),
+                                          fontSize: isDesktop(context)
+                                              ? screenwidth * 0.015
+                                              : screenwidth * 0.035),
                                     ),
                                     IconButton(
                                         onPressed: () =>

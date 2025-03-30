@@ -14,6 +14,9 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
   List<Meals> recipeModels = [];
   bool _isLoading = false;
   final TextEditingController _textController = TextEditingController();
@@ -150,120 +153,132 @@ class _SearchState extends State<Search> {
                 )),
               ),
             )
+          else if (_textController.text.isEmpty)
+            SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("Search for a recipe",
+                      style: TextStyle(fontSize: screenwidth * 0.04)),
+                ),
+              ),
+            )
           else if (recipeModels.isEmpty)
             SliverToBoxAdapter(
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text("No recipes found. Try searching!",
-                      style: TextStyle(fontSize: 18)),
+                      style: TextStyle(fontSize: screenwidth * 0.04)),
                 ),
               ),
             )
           else
-            SliverPadding(
-              padding: const EdgeInsets.all(10.0),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.64,
-                  crossAxisCount: 2, // number of columns
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final recipe = recipeModels[index];
-                    final isFavorite = favoriteMealIds.contains(recipe.idMeal);
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => RecipeDetails(
-                                  recipe: recipeModels[index],
-                                )));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Card(
-                          clipBehavior: Clip.antiAlias,
-                          semanticContainer: false,
-                          color: Color.fromRGBO(211, 231, 192, 1),
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // SizedBox(
-                                //   height: MediaQuery.of(context).size.height *
-                                //       0.023,
-                                // ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: _isLoading
-                                        ? Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        //Image
-                                        : Image.network(
-                                            recipeModels[index].strMealThumb ??
-                                                '',
-                                            scale: 0.2,
-                                            fit: BoxFit.cover),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  child: Text(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    recipeModels[index].strMeal ?? '',
-                                    style: TextStyle(
-                                        fontFamily: 'Bold',
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                0.021),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        recipeModels[index].strArea ?? '',
-                                        style: TextStyle(
-                                            fontFamily: 'Medium',
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.018),
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
+                crossAxisCount: isDesktop(context) ? 4 : 2, // number of columns
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final recipe = recipeModels[index];
+                  final isFavorite = favoriteMealIds.contains(recipe.idMeal);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RecipeDetails(
+                                recipe: recipeModels[index],
+                              )));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        semanticContainer: false,
+                        color: Color.fromRGBO(211, 231, 192, 1),
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // SizedBox(
+                              //   height: MediaQuery.of(context).size.height *
+                              //       0.023,
+                              // ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: _isLoading
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    //Image
+                                    : Center(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              screenheight *
+                                                  4 /
+                                                  screenwidth *
+                                                  3),
+                                          child: Image.network(
+                                              recipeModels[index]
+                                                      .strMealThumb ??
+                                                  '',
+                                              // scale: 0.2,
+                                              fit: BoxFit.cover),
+                                        ),
                                       ),
-                                      IconButton(
-                                          onPressed: () =>
-                                              _toggleFavorite(recipe),
-                                          icon: Icon(
-                                            isFavorite
-                                                ? Icons.favorite
-                                                : Icons.favorite_border,
-                                            color: isFavorite
-                                                ? Colors.red
-                                                : Colors.black,
-                                          ))
-                                    ],
-                                  ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Text(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  recipeModels[index].strMeal ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'Bold',
+                                      fontSize: isDesktop(context)
+                                          ? screenwidth * 0.03
+                                          : screenwidth * 0.05),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      recipeModels[index].strArea ?? '',
+                                      style: TextStyle(
+                                          fontFamily: 'Medium',
+                                          fontSize: isDesktop(context)
+                                              ? screenwidth * 0.015
+                                              : screenwidth * 0.035),
+                                    ),
+                                    IconButton(
+                                        onPressed: () =>
+                                            _toggleFavorite(recipe),
+                                        icon: Icon(
+                                          isFavorite
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: isFavorite
+                                              ? Colors.red
+                                              : Colors.black,
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    );
-                  },
-                  childCount: recipeModels.length,
-                ),
+                    ),
+                  );
+                },
+                childCount: recipeModels.length,
               ),
             ),
         ],
