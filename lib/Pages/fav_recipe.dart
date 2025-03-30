@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -12,24 +13,29 @@ class FavRecipe extends StatefulWidget {
 }
 
 class _FavRecipeState extends State<FavRecipe> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
   Set<String> favoriteMealIds = {};
   bool _isLoading = false;
 
   void _toggleFavorite(Meals meal) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    setState(() {
-      if (favoriteMealIds.contains(meal.idMeal)) {
-        favoriteMealIds.remove(meal.idMeal!);
-        favoriteRecipes.removeWhere((recipe) => recipe.idMeal == meal.idMeal);
-      } else {
-        favoriteMealIds.add(meal.idMeal!);
-        // Add the meal to favoriteRecipes if it's not already there
-        if (!favoriteRecipes.contains(meal)) {
-          favoriteRecipes.add(meal);
+    if (mounted) {
+      setState(() {
+        if (favoriteMealIds.contains(meal.idMeal)) {
+          favoriteMealIds.remove(meal.idMeal!);
+          favoriteRecipes.removeWhere((recipe) => recipe.idMeal == meal.idMeal);
+        } else {
+          favoriteMealIds.add(meal.idMeal!);
+          // Add the meal to favoriteRecipes if it's not already there
+          if (!favoriteRecipes.contains(meal)) {
+            favoriteRecipes.add(meal);
+          }
         }
-      }
-    });
+      });
+    }
 
     await prefs.setStringList('favoriteMeals', favoriteMealIds.toList());
   }
@@ -61,27 +67,30 @@ class _FavRecipeState extends State<FavRecipe> {
           var data = jsonDecode(response.body);
           if (data['meals'] != null && data['meals'].length > 0) {
             var meal = Meals.fromJson(data['meals'][0]);
-            setState(() {
-              if (favoriteMealIds.contains(meal.idMeal)) {
-                favoriteMealIds.remove(meal.idMeal!);
-                favoriteRecipes
-                    .removeWhere((recipe) => recipe.idMeal == meal.idMeal);
-              } else {
-                favoriteMealIds.add(meal.idMeal!);
-                // Add the meal to favoriteRecipes if it's not already there
-                if (!favoriteRecipes.contains(meal)) {
-                  favoriteRecipes.add(meal);
+            if (mounted) {
+              setState(() {
+                if (favoriteMealIds.contains(meal.idMeal)) {
+                  favoriteMealIds.remove(meal.idMeal!);
+                  favoriteRecipes
+                      .removeWhere((recipe) => recipe.idMeal == meal.idMeal);
+                } else {
+                  favoriteMealIds.add(meal.idMeal!);
+                  // Add the meal to favoriteRecipes if it's not already there
+                  if (!favoriteRecipes.contains(meal)) {
+                    favoriteRecipes.add(meal);
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
       }
     }
-
-    setState(() {
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -89,7 +98,14 @@ class _FavRecipeState extends State<FavRecipe> {
     double screenwidth = MediaQuery.of(context).size.width;
     double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: AppBar(title: Text("Favorite Recipes")),
+        appBar: AppBar(
+            title: Text(
+          "Favorite Recipes",
+          style: TextStyle(
+            color: Color.fromRGBO(76, 175, 80, 1),
+            fontFamily: 'Medium',
+          ),
+        )),
         body: _isLoading
             ? Padding(
                 padding: const EdgeInsets.only(top: 50),
@@ -102,13 +118,21 @@ class _FavRecipeState extends State<FavRecipe> {
                 ),
               )
             : favoriteRecipes.isEmpty
-                ? Center(child: Text("No favorite recipes yet!"))
+                ? Center(
+                    child: Text(
+                    "No favorite recipes yet!",
+                    style: TextStyle(
+                      fontSize: isDesktop(context)
+                          ? screenwidth * 0.03
+                          : screenwidth * 0.05,
+                    ),
+                  ))
                 : Center(
                     child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.64,
-                        crossAxisCount: 2,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
+                        crossAxisCount:
+                            isDesktop(context) ? 4 : 2, // number of columns,
                       ),
                       itemCount: favoriteRecipes.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -117,10 +141,21 @@ class _FavRecipeState extends State<FavRecipe> {
                             favoriteMealIds.contains(recipe.idMeal);
                         return GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => RecipeDetails(
-                                      recipe: favoriteRecipes[index],
-                                    )));
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        RecipeDetails(
+                                  recipe: favoriteRecipes[index],
+                                ),
+                                transitionDuration: Duration(milliseconds: 300),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                      opacity: animation, child: child);
+                                },
+                              ),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
@@ -139,19 +174,22 @@ class _FavRecipeState extends State<FavRecipe> {
                                     // ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: _isLoading
-                                            ? Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              )
-                                            //Image
-                                            : Image.network(
-                                                recipe.strMealThumb ?? '',
-                                                scale: 0.2,
-                                                fit: BoxFit.cover),
-                                      ),
+                                      child: _isLoading
+                                          ? Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          //Image
+                                          : Center(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: Image.network(
+                                                    recipe.strMealThumb ?? '',
+                                                    // scale: 0.2,
+                                                    fit: BoxFit.cover),
+                                              ),
+                                            ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -161,10 +199,9 @@ class _FavRecipeState extends State<FavRecipe> {
                                         recipe.strMeal ?? '',
                                         style: TextStyle(
                                             fontFamily: 'Bold',
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.021),
+                                            fontSize: isDesktop(context)
+                                                ? screenwidth * 0.03
+                                                : screenwidth * 0.05),
                                       ),
                                     ),
                                     Padding(
@@ -180,10 +217,9 @@ class _FavRecipeState extends State<FavRecipe> {
                                             recipe.strArea ?? '',
                                             style: TextStyle(
                                                 fontFamily: 'Medium',
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.018),
+                                                fontSize: isDesktop(context)
+                                                    ? screenwidth * 0.015
+                                                    : screenwidth * 0.035),
                                           ),
                                           IconButton(
                                               onPressed: () =>

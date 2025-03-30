@@ -45,8 +45,25 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 leading: Icon(Icons.favorite),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FavRecipe()));
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          FavRecipe(),
+                      transitionDuration: Duration(milliseconds: 200),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: animation.drive(
+                            Tween<Offset>(
+                              begin: Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ),
+                          ),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
                 },
               ),
             ),

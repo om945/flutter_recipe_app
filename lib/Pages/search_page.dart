@@ -100,188 +100,205 @@ class _SearchState extends State<Search> {
     double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        // toolbarHeight: screenwidth * 0.1,
         forceMaterialTransparency: true,
         title: Text(
           "Search",
           style: TextStyle(
-            color: Color.fromRGBO(76, 175, 80, 1),
+            color: Color.fromRGBO(50, 48, 49, 1),
             fontFamily: 'Medium',
-            fontSize: MediaQuery.of(context).size.height * 0.035,
+            // fontSize: screenwidth * 0.07,
           ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          // Search Bar
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  hintText: "Search for Recipes",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  suffixIcon: Container(
-                    height: 55,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(19),
-                      color: Colors.green,
+      body: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: CustomScrollView(
+          slivers: [
+            // Search Bar
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    hintText: "Search for Recipes",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    child: TextButton(
-                      onPressed: _onSearch,
-                      child:
-                          Text("Search", style: TextStyle(color: Colors.white)),
+                    suffixIcon: Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(19),
+                        color: Colors.green,
+                      ),
+                      child: TextButton(
+                        onPressed: _onSearch,
+                        child: Text("Search",
+                            style: TextStyle(color: Colors.white)),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
 
-          // Show Loading Indicator
-          if (_isLoading)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(50.0),
+            // Show Loading Indicator
+            if (_isLoading)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color.fromRGBO(7, 175, 80, 1),
+                    ),
+                  )),
+                ),
+              )
+            else if (_textController.text.isEmpty)
+              SliverToBoxAdapter(
                 child: Center(
-                    child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Color.fromRGBO(76, 175, 80, 1),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text("Search for a recipe",
+                        style: TextStyle(fontSize: screenwidth * 0.04)),
                   ),
-                )),
-              ),
-            )
-          else if (_textController.text.isEmpty)
-            SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text("Search for a recipe",
-                      style: TextStyle(fontSize: screenwidth * 0.04)),
                 ),
-              ),
-            )
-          else if (recipeModels.isEmpty)
-            SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text("No recipes found. Try searching!",
-                      style: TextStyle(fontSize: screenwidth * 0.04)),
+              )
+            else if (recipeModels.isEmpty)
+              SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Image.asset('assets/images/errorImg.png'),
+                  ),
                 ),
-              ),
-            )
-          else
-            SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
-                crossAxisCount: isDesktop(context) ? 4 : 2, // number of columns
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final recipe = recipeModels[index];
-                  final isFavorite = favoriteMealIds.contains(recipe.idMeal);
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RecipeDetails(
-                                recipe: recipeModels[index],
-                              )));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        semanticContainer: false,
-                        color: Color.fromRGBO(211, 231, 192, 1),
-                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // SizedBox(
-                              //   height: MediaQuery.of(context).size.height *
-                              //       0.023,
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: _isLoading
-                                    ? Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    //Image
-                                    : Center(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              screenheight *
-                                                  4 /
-                                                  screenwidth *
-                                                  3),
-                                          child: Image.network(
-                                              recipeModels[index]
-                                                      .strMealThumb ??
-                                                  '',
-                                              // scale: 0.2,
-                                              fit: BoxFit.cover),
+              )
+            else
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
+                  crossAxisCount:
+                      isDesktop(context) ? 4 : 2, // number of columns
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final recipe = recipeModels[index];
+                    final isFavorite = favoriteMealIds.contains(recipe.idMeal);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    RecipeDetails(
+                              recipe: recipeModels[index],
+                            ),
+                            transitionDuration: Duration(milliseconds: 200),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                  opacity: animation, child: child);
+                            },
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          semanticContainer: false,
+                          color: Color.fromRGBO(211, 231, 192, 1),
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // SizedBox(
+                                //   height: MediaQuery.of(context).size.height *
+                                //       0.023,
+                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: _isLoading
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      //Image
+                                      : Center(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.network(
+                                                recipeModels[index]
+                                                        .strMealThumb ??
+                                                    '',
+                                                // scale: 0.2,
+                                                fit: BoxFit.cover),
+                                          ),
                                         ),
-                                      ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                child: Text(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  recipeModels[index].strMeal ?? '',
-                                  style: TextStyle(
-                                      fontFamily: 'Bold',
-                                      fontSize: isDesktop(context)
-                                          ? screenwidth * 0.03
-                                          : screenwidth * 0.05),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
+                                SizedBox(
+                                  height: screenwidth * 0.15,
+                                  width: screenwidth * 0.45,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Text(
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      recipeModels[index].strArea ?? '',
+                                      recipeModels[index].strMeal ?? '',
                                       style: TextStyle(
-                                          fontFamily: 'Medium',
+                                          fontFamily: 'Bold',
                                           fontSize: isDesktop(context)
-                                              ? screenwidth * 0.015
-                                              : screenwidth * 0.035),
+                                              ? screenwidth * 0.03
+                                              : screenwidth * 0.05),
                                     ),
-                                    IconButton(
-                                        onPressed: () =>
-                                            _toggleFavorite(recipe),
-                                        icon: Icon(
-                                          isFavorite
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: isFavorite
-                                              ? Colors.red
-                                              : Colors.black,
-                                        ))
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        recipeModels[index].strArea ?? '',
+                                        style: TextStyle(
+                                            fontFamily: 'Medium',
+                                            fontSize: isDesktop(context)
+                                                ? screenwidth * 0.015
+                                                : screenwidth * 0.035),
+                                      ),
+                                      IconButton(
+                                          onPressed: () =>
+                                              _toggleFavorite(recipe),
+                                          icon: Icon(
+                                            isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: isFavorite
+                                                ? Colors.red
+                                                : Colors.black,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                childCount: recipeModels.length,
+                    );
+                  },
+                  childCount: recipeModels.length,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

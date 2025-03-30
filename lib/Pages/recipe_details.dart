@@ -32,7 +32,10 @@ class _RecipeDetailsState extends State<RecipeDetails> {
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: Text('Recipe Details',
-            style: TextStyle(fontSize: 20, fontFamily: 'Medium')),
+            style: TextStyle(
+              fontFamily: 'Medium',
+              color: Color.fromRGBO(50, 48, 49, 1),
+            )),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -41,7 +44,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             children: [
               Center(
                 child: SizedBox(
-                  height: screenheight * 0.3,
+                  height: screenwidth * 0.6,
                   width: screenwidth * 0.6,
                   child: Padding(
                     padding: EdgeInsets.all(10.0),
@@ -59,7 +62,10 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     maxLines: 2,
                     widget.recipe.strMeal ?? '',
                     style: TextStyle(
-                        fontSize: screenwidth * 0.06, fontFamily: 'Bold')),
+                      fontSize: screenwidth * 0.06,
+                      fontFamily: 'Bold',
+                      color: Color.fromRGBO(50, 48, 49, 1),
+                    )),
               ),
               Padding(
                 padding: EdgeInsets.all(8.0),
@@ -67,18 +73,21 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: screenheight * 0.07,
+                      height: screenwidth * 0.3,
                       width: screenwidth * 0.4,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Area:',
                               style: TextStyle(
-                                  fontSize: screenheight * 0.02,
-                                  fontFamily: 'Medium')),
+                                  fontSize: screenwidth * 0.04,
+                                  fontFamily: 'Medium',
+                                  color: Color.fromRGBO(79, 77, 78, 1))),
                           Text(widget.recipe.strArea ?? '',
                               style: TextStyle(
-                                  fontSize: screenwidth * 0.05,
-                                  fontFamily: 'Bold')),
+                                  fontSize: screenwidth * 0.055,
+                                  fontFamily: 'Bold',
+                                  color: Color.fromRGBO(79, 77, 78, 1))),
                         ],
                       ),
                     ),
@@ -86,21 +95,24 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       margin: EdgeInsets.symmetric(horizontal: 8),
                       width: 2,
                       height: screenheight * 0.08,
-                      color: Colors.black,
+                      color: Color.fromRGBO(200, 199, 199, 1),
                     ),
                     SizedBox(
-                      height: screenheight * 0.07,
+                      height: screenwidth * 0.2,
                       width: screenwidth * 0.4,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Category:',
                               style: TextStyle(
-                                  fontSize: screenheight * 0.02,
-                                  fontFamily: 'Medium')),
+                                  fontSize: screenwidth * 0.04,
+                                  fontFamily: 'Medium',
+                                  color: Color.fromRGBO(79, 77, 78, 1))),
                           Text(widget.recipe.strCategory ?? '',
                               style: TextStyle(
-                                  fontSize: screenwidth * 0.05,
-                                  fontFamily: 'Bold')),
+                                  fontSize: screenwidth * 0.055,
+                                  fontFamily: 'Bold',
+                                  color: Color.fromRGBO(79, 77, 78, 1))),
                         ],
                       ),
                     ),
@@ -108,9 +120,12 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text('• Ingredients:',
-                    style: TextStyle(fontSize: 18, fontFamily: 'Bold')),
+                padding: const EdgeInsets.all(15.0),
+                child: Text(' Ingredients:',
+                    style: TextStyle(
+                        fontSize: screenwidth * 0.05,
+                        fontFamily: 'Bold',
+                        color: Color.fromRGBO(79, 77, 78, 1))),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -118,7 +133,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   margin: EdgeInsets.symmetric(horizontal: 8),
                   width: screenwidth,
                   height: screenheight * 0.0008,
-                  color: Colors.black,
+                  color: Color.fromRGBO(200, 199, 199, 1),
                 ),
               ),
               ...[
@@ -130,8 +145,9 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       child: Row(
                         children: [
                           Text(
-                              '${i.toString().padLeft(2)}.  ${widget.recipe.getIngredient(i)} -  ${widget.recipe.getMeasure(i)}',
+                              '•  ${widget.recipe.getIngredient(i)} -  ${widget.recipe.getMeasure(i)}',
                               style: TextStyle(
+                                  color: Color.fromRGBO(79, 77, 78, 1),
                                   fontSize: screenwidth * 0.039,
                                   fontFamily: 'Medium')),
                         ],
@@ -150,6 +166,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       children: [
                         Text('Information',
                             style: TextStyle(
+                                color: Color.fromRGBO(79, 77, 78, 1),
                                 fontSize: screenwidth * 0.045,
                                 fontFamily: 'Bold')),
                         SizedBox(
@@ -176,17 +193,18 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                         child: Container(
                           width: screenwidth,
                           height: screenheight * 0.0008,
-                          color: Colors.black,
+                          color: Color.fromRGBO(200, 199, 199, 1),
                         ),
                       ),
                       secondChild: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(15.0),
                             child: Text(
                                 textAlign: TextAlign.left,
                                 widget.recipe.strInstructions ?? '',
                                 style: TextStyle(
+                                    color: Color.fromRGBO(79, 77, 78, 1),
                                     fontSize: screenwidth * 0.04,
                                     fontFamily: 'Medium')),
                           ),
@@ -203,30 +221,30 @@ class _RecipeDetailsState extends State<RecipeDetails> {
               Center(
                 heightFactor: 2,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: screenwidth * 0.1,
+                  width: screenwidth * 0.4,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(19),
-                    color: Color.fromRGBO(221, 156, 156, 1),
+                    borderRadius: BorderRadius.circular(
+                        screenheight * 4 * screenwidth * 3),
+                    color: Color.fromRGBO(243, 195, 195, 1),
                   ),
                   child: TextButton(
                     onPressed: () {
                       openYouTube(widget.recipe.strYoutube ?? '');
                     },
-                    child: SizedBox(
-                      width: screenwidth * 0.4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Watch on ",
-                              style: TextStyle(
-                                  color: Color.fromRGBO(50, 48, 49, 10))),
-                          Image.asset(
-                            'assets/images/YT.png',
-                            width: screenwidth * 0.08,
-                            height: screenwidth * 0.08,
-                          )
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Watch on ",
+                            style: TextStyle(
+                                fontSize: screenwidth * 0.04,
+                                color: Colors.black)),
+                        Image.asset(
+                          'assets/images/YT.png',
+                          width: screenwidth * 0.08,
+                          height: screenwidth * 0.08,
+                        )
+                      ],
                     ),
                   ),
                 ),

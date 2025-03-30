@@ -15,6 +15,7 @@ class _HomepageState extends State<Homepage> {
   bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 600;
   List<Categories> recipeModels = [];
+
   bool _isLoading = true;
   myRecipes() {
     setState(() {
@@ -115,248 +116,267 @@ class _HomepageState extends State<Homepage> {
       //       ]),
       // ),
       appBar: AppBar(
+        toolbarHeight: screenwidth * 0.1,
         clipBehavior: Clip.antiAlias,
         forceMaterialTransparency: true,
-        title: Text(
-          "Fork & Fire",
-          style: TextStyle(
-              color: Color.fromRGBO(76, 175, 80, 1),
-              fontFamily: 'Bold',
-              fontSize: screenheight * 0.045),
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Fork & Fire",
+            style: TextStyle(
+                color: Color.fromRGBO(76, 175, 80, 1),
+                fontFamily: 'Bold',
+                fontSize: screenwidth * 0.08),
+          ),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          // Image and details section
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: screenheight * 0.2 * screenwidth * 0.006,
-                    width: screenwidth * 0.8 * screenwidth * 0.006,
-                    child: Image.asset(
-                      height: screenheight * 0.3,
-                      width: screenwidth * 0.7,
-                      'assets/images/intro.png',
-                      fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: CustomScrollView(
+          slivers: [
+            // Image and details section
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: SizedBox(
+                      height: screenheight * 0.2 * screenwidth * 0.006,
+                      width: screenwidth * 0.8 * screenwidth * 0.006,
+                      child: Image.asset(
+                        height: screenheight * 0.3,
+                        width: screenwidth * 0.7,
+                        'assets/images/landingImg.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: SizedBox(
-                    height: screenheight * 0.055 * screenwidth * 0.006,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          child: Row(
-                            children: [
-                              Text("Discover",
-                                  style: TextStyle(
-                                      fontSize: screenwidth * 0.09,
-                                      fontFamily: 'Bold')),
-                              Text(" Delicious",
-                                  style: TextStyle(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 8, 0),
+                    child: SizedBox(
+                      height: screenwidth * 0.28,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            child: Row(
+                              children: [
+                                Text("Discover",
+                                    style: TextStyle(
+                                        fontSize: screenwidth * 0.09,
+                                        fontFamily: 'Bold')),
+                                Text(" Delicious",
+                                    style: TextStyle(
+                                        fontSize: screenwidth * 0.09,
+                                        fontFamily: 'Bold',
+                                        color: Color.fromRGBO(255, 152, 0, 1)))
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            top: screenwidth * 0.1,
+                            child: Row(
+                              children: [
+                                Text("Recipes",
+                                    style: TextStyle(
+                                        fontSize: screenwidth * 0.09,
+                                        fontFamily: 'Bold',
+                                        color: Color.fromRGBO(76, 175, 80, 1))),
+                                Text(" Instantly!",
+                                    style: TextStyle(
                                       fontSize: screenwidth * 0.09,
                                       fontFamily: 'Bold',
-                                      color: Color.fromRGBO(255, 152, 0, 1)))
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: screenheight * 0.02 * screenwidth * 0.006,
-                          child: Row(
-                            children: [
-                              Text("Recipes",
-                                  style: TextStyle(
-                                      fontSize: screenwidth * 0.09,
-                                      fontFamily: 'Bold',
-                                      color: Color.fromRGBO(76, 175, 80, 1))),
-                              Text(" Instantly!",
-                                  style: TextStyle(
-                                    fontSize: screenwidth * 0.09,
-                                    fontFamily: 'Bold',
-                                  ))
-                            ],
-                          ),
-                        )
-                      ],
+                                    ))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
-                  child: SizedBox(
-                    width: screenwidth * 0.8,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Find the perfect dish with easy step-by-step guides, smart recommendations, and ingredient-based searches. Cook, save, and share your favorites!',
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 8, 10),
+                    child: SizedBox(
+                      width: screenwidth * 0.8,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Find the perfect dish with easy step-by-step guides, smart recommendations, and ingredient-based searches. Cook, save, and share your favorites!',
+                            style: TextStyle(
+                                fontSize: screenwidth * 0.04,
+                                fontFamily: 'Bold'),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  //   child: Row(
+                  //     children: [
+                  //       Text("Discover", style: TextStyle(fontSize: 40, fontFamily: 'Bold')),
+                  //       Text(" Delicious", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
+                  //       color: Color.fromRGBO(255, 152, 0, 1)
+                  //       ))
+                  //     ],
+                  //   ),
+                  // ),
+                  //  Padding(
+                  //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  //   child: Row(
+                  //     children: [
+                  //       Text("Recipes", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
+                  //       color: Color.fromRGBO(76, 175, 80, 1)
+                  //       )),
+                  //       Text(" Instantly!", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
+                  //       ))
+                  //     ],
+                  //   ),
+                  // )
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          "Popular Categories",
                           style: TextStyle(
-                              fontSize: screenwidth * 0.04, fontFamily: 'Bold'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                //   child: Row(
-                //     children: [
-                //       Text("Discover", style: TextStyle(fontSize: 40, fontFamily: 'Bold')),
-                //       Text(" Delicious", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                //       color: Color.fromRGBO(255, 152, 0, 1)
-                //       ))
-                //     ],
-                //   ),
-                // ),
-                //  Padding(
-                //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                //   child: Row(
-                //     children: [
-                //       Text("Recipes", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                //       color: Color.fromRGBO(76, 175, 80, 1)
-                //       )),
-                //       Text(" Instantly!", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                //       ))
-                //     ],
-                //   ),
-                // )
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(screenwidth * 0.03),
-                      child: Text(
-                        "Popular Categories",
-                        style: TextStyle(
-                            fontSize: screenwidth * 0.05, fontFamily: 'Bold'),
-                      ),
-                    )
-                  ],
-                )
-              ],
+                              fontSize: screenwidth * 0.05, fontFamily: 'Bold'),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          // Grid view section
-          _isLoading
-              ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: screenheight * 0.2),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color.fromRGBO(76, 175, 80, 1),
+            // Grid view section
+            _isLoading
+                ? SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color.fromRGBO(76, 175, 80, 1),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              : SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.7,
-                    crossAxisCount:
-                        isDesktop(context) ? 4 : 2, // number of columns
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: screenheight * 0.01),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Homepage_Recipe(
-                                      recipe: recipeModels[index].strCategory ??
-                                          '')),
-                            );
-                          },
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            semanticContainer: false,
-                            color: Color.fromRGBO(211, 231, 192, 1),
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            child: SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: screenheight * 0.023,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: _isLoading
-                                        ? Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : Center(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      screenheight *
-                                                          4 /
-                                                          screenwidth *
-                                                          3),
-                                              child: Image.network(
-                                                  // scale: 0.2,
-                                                  fit: BoxFit.cover,
-                                                  recipeModels[index]
-                                                          .strCategoryThumb ??
-                                                      ''),
+                  )
+                : SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 0,
+                      childAspectRatio: 0.7,
+                      crossAxisCount:
+                          isDesktop(context) ? 4 : 2, // number of columns
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: screenheight * 0.01,
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      Homepage_Recipe(
+                                          recipe:
+                                              recipeModels[index].strCategory ??
+                                                  ''),
+                                  transitionDuration:
+                                      Duration(milliseconds: 200),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                        opacity: animation, child: child);
+                                  },
+                                ),
+                              );
+                            },
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              semanticContainer: false,
+                              color: Color.fromRGBO(211, 231, 192, 1),
+                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                              child: SizedBox(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: screenheight * 0.023,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: _isLoading
+                                          ? Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : Center(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: Image.network(
+                                                    // scale: 0.2,
+                                                    fit: BoxFit.cover,
+                                                    recipeModels[index]
+                                                            .strCategoryThumb ??
+                                                        ''),
+                                              ),
                                             ),
-                                          ),
-                                  ),
-                                  SizedBox(
-                                    height: screenheight * 0.01,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      recipeModels[index].strCategory ?? '',
-                                      style: TextStyle(
-                                          fontFamily: 'Bold',
-                                          fontSize: isDesktop(context)
-                                              ? screenwidth * 0.03
-                                              : screenwidth * 0.05),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: screenheight * 0.01,
-                                  ),
-                                  Padding(
-                                    //padding l and r = 8
-                                    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Text(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      recipeModels[index]
-                                              .strCategoryDescription ??
-                                          '',
-                                      style: TextStyle(
-                                          fontFamily: 'Medium',
-                                          fontSize: isDesktop(context)
-                                              ? screenwidth * 0.015
-                                              : screenwidth * 0.035),
+                                    SizedBox(
+                                      height: screenheight * 0.01,
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Text(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        recipeModels[index].strCategory ?? '',
+                                        style: TextStyle(
+                                            fontFamily: 'Bold',
+                                            fontSize: isDesktop(context)
+                                                ? screenwidth * 0.03
+                                                : screenwidth * 0.05),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: screenheight * 0.01,
+                                    ),
+                                    Padding(
+                                      //padding l and r = 8
+                                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                      child: Text(
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        recipeModels[index]
+                                                .strCategoryDescription ??
+                                            '',
+                                        style: TextStyle(
+                                            fontFamily: 'Medium',
+                                            fontSize: isDesktop(context)
+                                                ? screenwidth * 0.015
+                                                : screenwidth * 0.035),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    childCount: recipeModels.length,
+                        );
+                      },
+                      childCount: recipeModels.length,
+                    ),
                   ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

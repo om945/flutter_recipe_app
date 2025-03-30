@@ -19,7 +19,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List pages = const [
     Homepage(),
     Search(),
-  ]; // removed MyDrawer from the list
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +46,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
               }
             },
             currentIndex: myCurrentIndex,
-            selectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.018,
-                fontFamily: 'Bold'),
-            unselectedLabelStyle: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.016,
-                fontFamily: 'medium'),
+            selectedLabelStyle:
+                TextStyle(fontSize: screenwidth * 0.04, fontFamily: 'Bold'),
+            unselectedLabelStyle:
+                TextStyle(fontSize: screenwidth * 0.033, fontFamily: 'medium'),
             unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
             selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
             elevation: 10,
