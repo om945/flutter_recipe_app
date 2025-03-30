@@ -11,6 +11,9 @@ class RecipeDetails extends StatefulWidget {
 }
 
 class _RecipeDetailsState extends State<RecipeDetails> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
   Future<void> openYouTube(String videoId) async {
     final Uri url = Uri.parse(widget.recipe.strYoutube ?? '');
 
@@ -37,14 +40,16 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        width: MediaQuery.of(context).size.height * 0.3,
-                        widget.recipe.strMealThumb ?? ''),
+                child: SizedBox(
+                  height: screenheight * 0.3,
+                  width: screenwidth * 0.6,
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                          fit: BoxFit.cover, widget.recipe.strMealThumb ?? ''),
+                    ),
                   ),
                 ),
               ),
@@ -53,44 +58,49 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     widget.recipe.strMeal ?? '',
-                    style: TextStyle(fontSize: 24, fontFamily: 'Bold')),
+                    style: TextStyle(
+                        fontSize: screenwidth * 0.06, fontFamily: 'Bold')),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      width: MediaQuery.of(context).size.height * 0.15,
+                      height: screenheight * 0.07,
+                      width: screenwidth * 0.4,
                       child: Column(
                         children: [
                           Text('Area:',
                               style: TextStyle(
-                                  fontSize: 15, fontFamily: 'Medium')),
+                                  fontSize: screenheight * 0.02,
+                                  fontFamily: 'Medium')),
                           Text(widget.recipe.strArea ?? '',
-                              style:
-                                  TextStyle(fontSize: 18, fontFamily: 'Bold')),
+                              style: TextStyle(
+                                  fontSize: screenwidth * 0.05,
+                                  fontFamily: 'Bold')),
                         ],
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 8),
                       width: 2,
-                      height: MediaQuery.of(context).size.height * 0.08,
+                      height: screenheight * 0.08,
                       color: Colors.black,
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      width: MediaQuery.of(context).size.height * 0.15,
+                      height: screenheight * 0.07,
+                      width: screenwidth * 0.4,
                       child: Column(
                         children: [
                           Text('Category:',
                               style: TextStyle(
-                                  fontSize: 15, fontFamily: 'Medium')),
+                                  fontSize: screenheight * 0.02,
+                                  fontFamily: 'Medium')),
                           Text(widget.recipe.strCategory ?? '',
-                              style:
-                                  TextStyle(fontSize: 18, fontFamily: 'Bold')),
+                              style: TextStyle(
+                                  fontSize: screenwidth * 0.05,
+                                  fontFamily: 'Bold')),
                         ],
                       ),
                     ),
@@ -101,6 +111,15 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 padding: const EdgeInsets.all(10.0),
                 child: Text('• Ingredients:',
                     style: TextStyle(fontSize: 18, fontFamily: 'Bold')),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  width: screenwidth,
+                  height: screenheight * 0.0008,
+                  color: Colors.black,
+                ),
               ),
               ...[
                 for (int i = 1; i <= 20; i++)
@@ -113,7 +132,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                           Text(
                               '${i.toString().padLeft(2)}.  ${widget.recipe.getIngredient(i)} -  ${widget.recipe.getMeasure(i)}',
                               style: TextStyle(
-                                  fontSize: 15, fontFamily: 'Medium')),
+                                  fontSize: screenwidth * 0.039,
+                                  fontFamily: 'Medium')),
                         ],
                       ),
                     ),
@@ -129,14 +149,19 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Information',
-                            style: TextStyle(fontSize: 17, fontFamily: 'Bold')),
+                            style: TextStyle(
+                                fontSize: screenwidth * 0.045,
+                                fontFamily: 'Bold')),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         IconButton(
-                          icon: Icon(_isExpanded
-                              ? Icons.arrow_drop_up
-                              : Icons.arrow_drop_down),
+                          icon: Icon(
+                            _isExpanded
+                                ? Icons.arrow_drop_up_rounded
+                                : Icons.arrow_drop_down_rounded,
+                            size: screenwidth * 0.09,
+                          ),
                           onPressed: () {
                             setState(() {
                               _isExpanded = !_isExpanded;
@@ -146,7 +171,14 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       ],
                     ),
                     AnimatedCrossFade(
-                      firstChild: Container(),
+                      firstChild: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          width: screenwidth,
+                          height: screenheight * 0.0008,
+                          color: Colors.black,
+                        ),
+                      ),
                       secondChild: Column(
                         children: [
                           Padding(
@@ -155,7 +187,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                                 textAlign: TextAlign.left,
                                 widget.recipe.strInstructions ?? '',
                                 style: TextStyle(
-                                    fontSize: 15, fontFamily: 'Medium')),
+                                    fontSize: screenwidth * 0.04,
+                                    fontFamily: 'Medium')),
                           ),
                         ],
                       ),
@@ -179,9 +212,22 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     onPressed: () {
                       openYouTube(widget.recipe.strYoutube ?? '');
                     },
-                    child: Text("Watch on YouTube",
-                        style:
-                            TextStyle(color: Color.fromRGBO(50, 48, 49, 10))),
+                    child: SizedBox(
+                      width: screenwidth * 0.4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Watch on ",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(50, 48, 49, 10))),
+                          Image.asset(
+                            'assets/images/YT.png',
+                            width: screenwidth * 0.08,
+                            height: screenwidth * 0.08,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               )

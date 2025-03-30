@@ -204,7 +204,7 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
               child: Center(
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: Text("No recipes found. Try searching!",
+                  child: Text("No recipes found !",
                       style: TextStyle(fontSize: screenwidth * 0.04)),
                 ),
               ),
