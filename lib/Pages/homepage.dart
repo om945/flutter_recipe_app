@@ -40,7 +40,7 @@ class _HomepageState extends State<Homepage>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 600),
+      duration: Duration(milliseconds: 500),
     );
     _animationController.forward();
   }
@@ -155,16 +155,22 @@ class _HomepageState extends State<Homepage>
                       width: isDesktop(context)
                           ? screenwidth * 0.7
                           : screenwidth * 1,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1, 0),
-                          end: Offset(0, 0),
-                        ).animate(_animationController),
-                        child: Image.asset(
-                          height: screenheight * 0.3,
-                          width: screenwidth * 0.7,
-                          'assets/images/landingImg.png',
-                          fit: BoxFit.cover,
+                      child: FadeTransition(
+                        opacity: CurvedAnimation(
+                          parent: _animationController,
+                          curve: Curves.slowMiddle,
+                        ),
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(1, 0),
+                            end: Offset(0, 0),
+                          ).animate(_animationController),
+                          child: Image.asset(
+                            height: screenheight * 0.3,
+                            width: screenwidth * 0.7,
+                            'assets/images/landingImg.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -176,50 +182,63 @@ class _HomepageState extends State<Homepage>
                       child: Stack(
                         children: [
                           Positioned(
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset(-1, 0),
-                                end: Offset(0, 0),
-                              ).animate(_animationController),
-                              child: Row(
-                                children: [
-                                  Text("Discover",
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(50, 48, 49, 1),
-                                          fontSize: screenwidth * 0.09,
-                                          fontFamily: 'Bold')),
-                                  Text(" Delicious",
-                                      style: TextStyle(
-                                          fontSize: screenwidth * 0.09,
-                                          fontFamily: 'Bold',
-                                          color:
-                                              Color.fromRGBO(255, 152, 0, 1)))
-                                ],
+                            child: FadeTransition(
+                              opacity: CurvedAnimation(
+                                parent: _animationController,
+                                curve: Curves.slowMiddle,
+                              ),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(-1, 0),
+                                  end: Offset(0, 0),
+                                ).animate(_animationController),
+                                child: Row(
+                                  children: [
+                                    Text("Discover",
+                                        style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(50, 48, 49, 1),
+                                            fontSize: screenwidth * 0.09,
+                                            fontFamily: 'Bold')),
+                                    Text(" Delicious",
+                                        style: TextStyle(
+                                            fontSize: screenwidth * 0.09,
+                                            fontFamily: 'Bold',
+                                            color:
+                                                Color.fromRGBO(255, 152, 0, 1)))
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           Positioned(
                             top: screenwidth * 0.1,
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: Offset(1, 0),
-                                end: Offset(0, 0),
-                              ).animate(_animationController),
-                              child: Row(
-                                children: [
-                                  Text("Recipes",
-                                      style: TextStyle(
+                            child: FadeTransition(
+                              opacity: CurvedAnimation(
+                                parent: _animationController,
+                                curve: Curves.slowMiddle,
+                              ),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(1, 0),
+                                  end: Offset(0, 0),
+                                ).animate(_animationController),
+                                child: Row(
+                                  children: [
+                                    Text("Recipes",
+                                        style: TextStyle(
+                                            fontSize: screenwidth * 0.09,
+                                            fontFamily: 'Bold',
+                                            color: Color.fromRGBO(
+                                                76, 175, 80, 1))),
+                                    Text(" Instantly!",
+                                        style: TextStyle(
+                                          color: Color.fromRGBO(50, 48, 49, 1),
                                           fontSize: screenwidth * 0.09,
                                           fontFamily: 'Bold',
-                                          color:
-                                              Color.fromRGBO(76, 175, 80, 1))),
-                                  Text(" Instantly!",
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(50, 48, 49, 1),
-                                        fontSize: screenwidth * 0.09,
-                                        fontFamily: 'Bold',
-                                      ))
-                                ],
+                                        ))
+                                  ],
+                                ),
                               ),
                             ),
                           )
@@ -274,7 +293,7 @@ class _HomepageState extends State<Homepage>
             _isLoading
                 ? SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 50),
+                      padding: EdgeInsets.only(top: 50, bottom: 20),
                       child: Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
