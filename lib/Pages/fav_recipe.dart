@@ -14,7 +14,7 @@ class FavRecipe extends StatefulWidget {
 
 class _FavRecipeState extends State<FavRecipe> {
   bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+      MediaQuery.of(context).size.width >= 650;
 
   Set<String> favoriteMealIds = {};
   bool _isLoading = false;
@@ -122,125 +122,141 @@ class _FavRecipeState extends State<FavRecipe> {
                     child: Text(
                     "No favorite recipes yet!",
                     style: TextStyle(
+                      fontFamily: 'Medium',
                       fontSize: isDesktop(context)
                           ? screenwidth * 0.03
                           : screenwidth * 0.05,
                     ),
                   ))
-                : Center(
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
-                        crossAxisCount:
-                            isDesktop(context) ? 4 : 2, // number of columns,
-                      ),
-                      itemCount: favoriteRecipes.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final recipe = favoriteRecipes[index];
-                        final isFavorite =
-                            favoriteMealIds.contains(recipe.idMeal);
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        RecipeDetails(
-                                  recipe: favoriteRecipes[index],
+                : Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Center(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: isDesktop(context) ? 0.6 : 0.64,
+                          crossAxisCount:
+                              isDesktop(context) ? 4 : 2, // number of columns,
+                        ),
+                        itemCount: favoriteRecipes.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final recipe = favoriteRecipes[index];
+                          final isFavorite =
+                              favoriteMealIds.contains(recipe.idMeal);
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      RecipeDetails(
+                                    recipe: favoriteRecipes[index],
+                                  ),
+                                  transitionDuration:
+                                      Duration(milliseconds: 300),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                        opacity: animation, child: child);
+                                  },
                                 ),
-                                transitionDuration: Duration(milliseconds: 300),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  return FadeTransition(
-                                      opacity: animation, child: child);
-                                },
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              semanticContainer: false,
-                              color: Color.fromRGBO(211, 231, 192, 1),
-                              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              child: SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // SizedBox(
-                                    //   height: MediaQuery.of(context).size.height *
-                                    //       0.023,
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: _isLoading
-                                          ? Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            )
-                                          //Image
-                                          : Center(
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                child: Image.network(
-                                                    recipe.strMealThumb ?? '',
-                                                    // scale: 0.2,
-                                                    fit: BoxFit.cover),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Card(
+                                clipBehavior: Clip.antiAlias,
+                                semanticContainer: false,
+                                color: Color.fromRGBO(211, 231, 192, 1),
+                                margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                child: SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // SizedBox(
+                                      //   height: MediaQuery.of(context).size.height *
+                                      //       0.023,
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: _isLoading
+                                            ? Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )
+                                            //Image
+                                            : Center(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: Image.network(
+                                                      recipe.strMealThumb ?? '',
+                                                      // scale: 0.2,
+                                                      fit: BoxFit.cover),
+                                                ),
                                               ),
-                                            ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                      child: Text(
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        recipe.strMeal ?? '',
-                                        style: TextStyle(
-                                            fontFamily: 'Bold',
-                                            fontSize: isDesktop(context)
-                                                ? screenwidth * 0.03
-                                                : screenwidth * 0.05),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
+                                      SizedBox(
+                                        height: isDesktop(context)
+                                            ? screenwidth * 0.085
+                                            : screenwidth * 0.14,
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                          child: Text(
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            recipe.strArea ?? '',
+                                            recipe.strMeal ?? '',
                                             style: TextStyle(
-                                                fontFamily: 'Medium',
+                                                color: Color.fromRGBO(
+                                                    50, 48, 49, 1),
+                                                fontFamily: 'Bold',
                                                 fontSize: isDesktop(context)
-                                                    ? screenwidth * 0.015
-                                                    : screenwidth * 0.035),
+                                                    ? screenwidth * 0.03
+                                                    : screenwidth * 0.05),
                                           ),
-                                          IconButton(
-                                              onPressed: () =>
-                                                  _toggleFavorite(recipe),
-                                              icon: Icon(
-                                                  isFavorite
-                                                      ? Icons.favorite
-                                                      : Icons.favorite_border,
-                                                  color: isFavorite
-                                                      ? Colors.red
-                                                      : Colors.black))
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 0, 8, 0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              recipe.strArea ?? '',
+                                              style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      79, 77, 78, 1),
+                                                  fontFamily: 'Medium',
+                                                  fontSize: isDesktop(context)
+                                                      ? screenwidth * 0.015
+                                                      : screenwidth * 0.035),
+                                            ),
+                                            IconButton(
+                                                onPressed: () =>
+                                                    _toggleFavorite(recipe),
+                                                icon: Icon(
+                                                    isFavorite
+                                                        ? Icons.favorite
+                                                        : Icons.favorite_border,
+                                                    color: isFavorite
+                                                        ? Colors.red
+                                                        : Colors.black))
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ));
   }

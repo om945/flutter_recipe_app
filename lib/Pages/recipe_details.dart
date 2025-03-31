@@ -12,7 +12,7 @@ class RecipeDetails extends StatefulWidget {
 
 class _RecipeDetailsState extends State<RecipeDetails> {
   bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+      MediaQuery.of(context).size.width >= 650;
 
   Future<void> openYouTube(String videoId) async {
     final Uri url = Uri.parse(widget.recipe.strYoutube ?? '');
@@ -38,6 +38,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
             )),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(10),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,10 +58,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
               ),
               Center(
-                child: Text(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    widget.recipe.strMeal ?? '',
+                child: Text(widget.recipe.strMeal ?? '',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: screenwidth * 0.06,
                       fontFamily: 'Bold',
@@ -68,7 +67,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     )),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -120,7 +119,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text(' Ingredients:',
                     style: TextStyle(
                         fontSize: screenwidth * 0.05,

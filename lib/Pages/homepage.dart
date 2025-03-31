@@ -11,9 +11,12 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends State<Homepage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
   bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+      MediaQuery.of(context).size.width >= 650;
   List<Categories> recipeModels = [];
 
   bool _isLoading = true;
@@ -35,6 +38,11 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     myRecipes();
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    );
+    _animationController.forward();
   }
 
   @override
@@ -141,13 +149,23 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   Center(
                     child: SizedBox(
-                      height: screenheight * 0.2 * screenwidth * 0.006,
-                      width: screenwidth * 0.8 * screenwidth * 0.006,
-                      child: Image.asset(
-                        height: screenheight * 0.3,
-                        width: screenwidth * 0.7,
-                        'assets/images/landingImg.png',
-                        fit: BoxFit.cover,
+                      height: isDesktop(context)
+                          ? screenheight * 0.5
+                          : screenheight * 0.4,
+                      width: isDesktop(context)
+                          ? screenwidth * 0.7
+                          : screenwidth * 1,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1, 0),
+                          end: Offset(0, 0),
+                        ).animate(_animationController),
+                        child: Image.asset(
+                          height: screenheight * 0.3,
+                          width: screenwidth * 0.7,
+                          'assets/images/landingImg.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -158,35 +176,51 @@ class _HomepageState extends State<Homepage> {
                       child: Stack(
                         children: [
                           Positioned(
-                            child: Row(
-                              children: [
-                                Text("Discover",
-                                    style: TextStyle(
-                                        fontSize: screenwidth * 0.09,
-                                        fontFamily: 'Bold')),
-                                Text(" Delicious",
-                                    style: TextStyle(
-                                        fontSize: screenwidth * 0.09,
-                                        fontFamily: 'Bold',
-                                        color: Color.fromRGBO(255, 152, 0, 1)))
-                              ],
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(-1, 0),
+                                end: Offset(0, 0),
+                              ).animate(_animationController),
+                              child: Row(
+                                children: [
+                                  Text("Discover",
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(50, 48, 49, 1),
+                                          fontSize: screenwidth * 0.09,
+                                          fontFamily: 'Bold')),
+                                  Text(" Delicious",
+                                      style: TextStyle(
+                                          fontSize: screenwidth * 0.09,
+                                          fontFamily: 'Bold',
+                                          color:
+                                              Color.fromRGBO(255, 152, 0, 1)))
+                                ],
+                              ),
                             ),
                           ),
                           Positioned(
                             top: screenwidth * 0.1,
-                            child: Row(
-                              children: [
-                                Text("Recipes",
-                                    style: TextStyle(
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: Offset(1, 0),
+                                end: Offset(0, 0),
+                              ).animate(_animationController),
+                              child: Row(
+                                children: [
+                                  Text("Recipes",
+                                      style: TextStyle(
+                                          fontSize: screenwidth * 0.09,
+                                          fontFamily: 'Bold',
+                                          color:
+                                              Color.fromRGBO(76, 175, 80, 1))),
+                                  Text(" Instantly!",
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(50, 48, 49, 1),
                                         fontSize: screenwidth * 0.09,
                                         fontFamily: 'Bold',
-                                        color: Color.fromRGBO(76, 175, 80, 1))),
-                                Text(" Instantly!",
-                                    style: TextStyle(
-                                      fontSize: screenwidth * 0.09,
-                                      fontFamily: 'Bold',
-                                    ))
-                              ],
+                                      ))
+                                ],
+                              ),
                             ),
                           )
                         ],
@@ -199,11 +233,15 @@ class _HomepageState extends State<Homepage> {
                       width: screenwidth * 0.8,
                       child: Column(
                         children: [
-                          Text(
-                            'Find the perfect dish with easy step-by-step guides, smart recommendations, and ingredient-based searches. Cook, save, and share your favorites!',
-                            style: TextStyle(
-                                fontSize: screenwidth * 0.04,
-                                fontFamily: 'Bold'),
+                          FadeTransition(
+                            opacity: _animationController,
+                            child: Text(
+                              'Find the perfect dish with easy step-by-step guides, smart recommendations, and ingredient-based searches. Cook, save, and share your favorites!',
+                              style: TextStyle(
+                                  color: Color.fromRGBO(50, 48, 49, 1),
+                                  fontSize: screenwidth * 0.04,
+                                  fontFamily: 'Bold'),
+                            ),
                           )
                         ],
                       ),
@@ -212,37 +250,19 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(
                     height: 20,
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  //   child: Row(
-                  //     children: [
-                  //       Text("Discover", style: TextStyle(fontSize: 40, fontFamily: 'Bold')),
-                  //       Text(" Delicious", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                  //       color: Color.fromRGBO(255, 152, 0, 1)
-                  //       ))
-                  //     ],
-                  //   ),
-                  // ),
-                  //  Padding(
-                  //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  //   child: Row(
-                  //     children: [
-                  //       Text("Recipes", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                  //       color: Color.fromRGBO(76, 175, 80, 1)
-                  //       )),
-                  //       Text(" Instantly!", style: TextStyle(fontSize: 40, fontFamily: 'Bold',
-                  //       ))
-                  //     ],
-                  //   ),
-                  // )
                   Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.all(15),
-                        child: Text(
-                          "Popular Categories",
-                          style: TextStyle(
-                              fontSize: screenwidth * 0.05, fontFamily: 'Bold'),
+                        child: FadeTransition(
+                          opacity: _animationController,
+                          child: Text(
+                            "Popular Categories",
+                            style: TextStyle(
+                                color: Color.fromRGBO(50, 48, 49, 1),
+                                fontSize: screenwidth * 0.05,
+                                fontFamily: 'Bold'),
+                          ),
                         ),
                       )
                     ],
@@ -340,6 +360,8 @@ class _HomepageState extends State<Homepage> {
                                         overflow: TextOverflow.ellipsis,
                                         recipeModels[index].strCategory ?? '',
                                         style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(50, 48, 49, 1),
                                             fontFamily: 'Bold',
                                             fontSize: isDesktop(context)
                                                 ? screenwidth * 0.03
@@ -359,6 +381,8 @@ class _HomepageState extends State<Homepage> {
                                                 .strCategoryDescription ??
                                             '',
                                         style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(79, 77, 78, 1),
                                             fontFamily: 'Medium',
                                             fontSize: isDesktop(context)
                                                 ? screenwidth * 0.015

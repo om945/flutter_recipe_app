@@ -15,7 +15,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+      MediaQuery.of(context).size.width >= 650;
 
   List<Meals> recipeModels = [];
   bool _isLoading = false;
@@ -105,10 +105,11 @@ class _SearchState extends State<Search> {
         title: Text(
           "Search",
           style: TextStyle(
-            color: Color.fromRGBO(50, 48, 49, 1),
-            fontFamily: 'Medium',
-            // fontSize: screenwidth * 0.07,
-          ),
+              color: Color.fromRGBO(50, 48, 49, 1),
+              fontFamily: 'Medium',
+              fontSize: isDesktop(context)
+                  ? screenwidth * 0.03
+                  : screenwidth * 0.065),
         ),
       ),
       body: Padding(
@@ -122,7 +123,11 @@ class _SearchState extends State<Search> {
                 child: TextField(
                   controller: _textController,
                   decoration: InputDecoration(
-                    hintText: "Search for Recipes",
+                    hintStyle: TextStyle(
+                      color: Color.fromRGBO(50, 48, 49, 1),
+                      fontFamily: 'Medium',
+                    ),
+                    hintText: "Search for Recipes..",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -162,7 +167,10 @@ class _SearchState extends State<Search> {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Text("Search for a recipe",
-                        style: TextStyle(fontSize: screenwidth * 0.04)),
+                        style: TextStyle(
+                            fontSize: screenwidth * 0.04,
+                            fontFamily: 'Medium',
+                            color: Color.fromRGBO(79, 77, 78, 1))),
                   ),
                 ),
               )
@@ -171,7 +179,12 @@ class _SearchState extends State<Search> {
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Image.asset('assets/images/errorImg.png'),
+                    child: Image.asset(
+                      height: screenheight * 0.3,
+                      width: screenwidth * 0.7,
+                      'assets/images/errorImg.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               )
@@ -240,8 +253,9 @@ class _SearchState extends State<Search> {
                                         ),
                                 ),
                                 SizedBox(
-                                  height: screenwidth * 0.15,
-                                  width: screenwidth * 0.45,
+                                  height: isDesktop(context)
+                                      ? screenwidth * 0.085
+                                      : screenwidth * 0.135,
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                     child: Text(
@@ -249,6 +263,7 @@ class _SearchState extends State<Search> {
                                       overflow: TextOverflow.ellipsis,
                                       recipeModels[index].strMeal ?? '',
                                       style: TextStyle(
+                                          color: Color.fromRGBO(50, 48, 49, 1),
                                           fontFamily: 'Bold',
                                           fontSize: isDesktop(context)
                                               ? screenwidth * 0.03
@@ -268,6 +283,8 @@ class _SearchState extends State<Search> {
                                         overflow: TextOverflow.ellipsis,
                                         recipeModels[index].strArea ?? '',
                                         style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(50, 48, 49, 1),
                                             fontFamily: 'Medium',
                                             fontSize: isDesktop(context)
                                                 ? screenwidth * 0.015

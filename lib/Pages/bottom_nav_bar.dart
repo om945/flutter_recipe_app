@@ -15,6 +15,9 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 650;
+
   int myCurrentIndex = 0;
   List pages = const [
     Homepage(),
@@ -46,10 +49,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
               }
             },
             currentIndex: myCurrentIndex,
-            selectedLabelStyle:
-                TextStyle(fontSize: screenwidth * 0.04, fontFamily: 'Bold'),
-            unselectedLabelStyle:
-                TextStyle(fontSize: screenwidth * 0.033, fontFamily: 'medium'),
+            selectedLabelStyle: TextStyle(
+                fontSize: isDesktop(context)
+                    ? screenwidth * 0.03
+                    : screenwidth * 0.04,
+                fontFamily: 'Bold'),
+            unselectedLabelStyle: TextStyle(
+                fontSize: isDesktop(context)
+                    ? screenwidth * 0.022
+                    : screenwidth * 0.033,
+                fontFamily: 'medium'),
             unselectedItemColor: Color.fromRGBO(0, 0, 0, 10),
             selectedItemColor: Color.fromRGBO(76, 175, 80, 1),
             elevation: 10,
