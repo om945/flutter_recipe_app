@@ -151,10 +151,10 @@ class _HomepageState extends State<Homepage>
                     child: SizedBox(
                       height: isDesktop(context)
                           ? screenheight * 0.5
-                          : screenheight * 0.4,
+                          : screenheight * 0.45,
                       width: isDesktop(context)
                           ? screenwidth * 0.7
-                          : screenwidth * 1,
+                          : screenwidth * 0.9,
                       child: FadeTransition(
                         opacity: CurvedAnimation(
                           parent: _animationController,
@@ -169,7 +169,7 @@ class _HomepageState extends State<Homepage>
                             height: screenheight * 0.3,
                             width: screenwidth * 0.7,
                             'assets/images/landingImg.png',
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),

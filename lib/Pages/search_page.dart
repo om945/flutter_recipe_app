@@ -121,8 +121,18 @@ class _SearchState extends State<Search> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextField(
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  autofocus: false,
+                  focusNode: FocusNode(canRequestFocus: true),
                   controller: _textController,
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(76, 175, 80, 1),
+                        )),
                     hintStyle: TextStyle(
                       color: Color.fromRGBO(50, 48, 49, 1),
                       fontFamily: 'Medium',
@@ -132,17 +142,20 @@ class _SearchState extends State<Search> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     suffixIcon: Container(
-                      height: 55,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(19),
-                        color: Colors.green,
-                      ),
-                      child: TextButton(
-                        onPressed: _onSearch,
-                        child: Text("Search",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
+                        height: 55,
+                        width: screenwidth * 0.15,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(19),
+                              bottomRight: Radius.circular(19)),
+                          color: Color.fromRGBO(76, 175, 80, 1),
+                        ),
+                        child: IconButton(
+                            onPressed: _onSearch,
+                            icon: Icon(
+                              Icons.search_rounded,
+                              color: Colors.white,
+                            ))),
                   ),
                 ),
               ),
@@ -179,11 +192,22 @@ class _SearchState extends State<Search> {
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Image.asset(
-                      height: screenheight * 0.3,
-                      width: screenwidth * 0.7,
-                      'assets/images/errorImg.png',
-                      fit: BoxFit.cover,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          height: screenheight * 0.3,
+                          width: screenwidth * 0.7,
+                          'assets/images/errorImg.png',
+                          fit: BoxFit.contain,
+                        ),
+                        Text(
+                            textAlign: TextAlign.center,
+                            "No recipes found! Try searching something else...",
+                            style: TextStyle(
+                                fontSize: screenwidth * 0.05,
+                                fontFamily: 'Medium',
+                                color: Color.fromRGBO(79, 77, 78, 1))),
+                      ],
                     ),
                   ),
                 ),

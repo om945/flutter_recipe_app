@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Medium',
             color: Color.fromRGBO(50, 48, 49, 1),
           ),
-          message: 'Press again to exit',
+          message: 'Press/Swipe again to exit',
           child: BottomNavBar()),
     );
   }
