@@ -21,7 +21,7 @@ class _MyDrawerState extends State<MyDrawer> {
           DrawerHeader(
               child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Image.asset('assets/icon/app_logo.png'),
+            child: Image.asset('assets/images/applogo.png'),
           )),
           Padding(
             padding: const EdgeInsets.all(15.0),
