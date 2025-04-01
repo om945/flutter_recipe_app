@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_recipe_app/Pages/about_page.dart';
 import 'package:flutter_recipe_app/Pages/fav_recipe.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -76,7 +77,25 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
                 leading: Icon(Icons.info),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          AboutPage(),
+                      transitionDuration: Duration(milliseconds: 200),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return SlideTransition(
+                          position: animation.drive(
+                            Tween<Offset>(
+                              begin: Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ),
+                          ),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
                 },
               ),
             )
