@@ -16,6 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color.fromRGBO(76, 175, 80, 1),
+          selectionColor: Color.fromRGBO(76, 175, 80, 1),
+          selectionHandleColor: Color.fromRGBO(76, 175, 80, 1),
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFFF5F5DC),
         ),

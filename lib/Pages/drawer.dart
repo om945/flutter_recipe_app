@@ -197,6 +197,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       Text(
                         'Visit our Website',
                         style: TextStyle(
+                          fontFamily: 'Medium',
                           color: Color.fromRGBO(79, 77, 78, 1),
                         ),
                       ),
@@ -217,7 +218,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Copyright @2025. All rights reserved | Made by ',
+                      text: 'Copyright © 2025. All rights reserved | Made by ',
                       style: TextStyle(
                           fontFamily: 'Medium',
                           color: Color.fromRGBO(79, 77, 78, 1)),

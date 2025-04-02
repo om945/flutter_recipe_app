@@ -187,7 +187,7 @@ class _Homepage_RecipeState extends State<Homepage_Recipe> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
           child: CustomScrollView(
             slivers: [
               if (_isLoading)
