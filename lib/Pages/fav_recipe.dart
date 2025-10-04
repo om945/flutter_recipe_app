@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_recipe_app/Pages/recipe_details.dart';
 import 'package:flutter_recipe_app/modules/recipe_search.dart';
@@ -96,7 +94,6 @@ class _FavRecipeState extends State<FavRecipe> {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
-    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
             title: Text(

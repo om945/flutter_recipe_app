@@ -73,37 +73,6 @@ class _MyDrawerState extends State<MyDrawer> {
               },
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(15.0),
-          //   child: ListTile(
-          //     title: Text(
-          //       "About",
-          //       style: TextStyle(fontSize: 20, fontFamily: 'Medium'),
-          //     ),
-          //     leading: Icon(Icons.info),
-          //     onTap: () {
-          //       Navigator.of(context).push(
-          //         PageRouteBuilder(
-          //           pageBuilder: (context, animation, secondaryAnimation) =>
-          //               AboutPage(),
-          //           transitionDuration: Duration(milliseconds: 200),
-          //           transitionsBuilder:
-          //               (context, animation, secondaryAnimation, child) {
-          //             return SlideTransition(
-          //               position: animation.drive(
-          //                 Tween<Offset>(
-          //                   begin: Offset(1.0, 0.0),
-          //                   end: Offset.zero,
-          //                 ),
-          //               ),
-          //               child: child,
-          //             );
-          //           },
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // )
           Expanded(
             child: Container(),
           ),
